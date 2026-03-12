@@ -1,0 +1,19 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "allowCompoundWords": true,
+  "words": [
+    "coliff",
+    "COMMITLINT",
+    "cooldown",
+    "fediverse",
+    "htmlhint",
+    "nvmrc",
+    "Oliff",
+    "Svgs",
+    "tagname",
+    "twbs",
+    "ZIZMOR"
+  ],
+  "useGitignore": true
+}

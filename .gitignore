@@ -1,0 +1,13 @@
+# Folders to ignore
+node_modules/
+dist/
+
+# OS or Editor folders
+._*
+.cache
+.DS_Store
+Thumbs.db
+
+# Files
+*.bin
+npm-debug.log

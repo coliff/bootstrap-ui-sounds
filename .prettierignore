@@ -1,0 +1,4 @@
+.cspell.json
+*.min.*
+dist/
+
