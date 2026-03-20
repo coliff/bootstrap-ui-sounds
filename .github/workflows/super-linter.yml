@@ -12,6 +12,7 @@ jobs:
   lint:
     name: Lint Code Base
     runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' }}
 
     permissions:
       contents: read
@@ -33,10 +34,6 @@ jobs:
       - name: Run Super-Linter
         uses: super-linter/super-linter@61abc07d755095a68f4987d1c2c3d1d64408f1f9 # v8.5.0
         env:
-          FIX_CSS_PRETTIER: true
-          FIX_GITHUB_ACTIONS_ZIZMOR: true
-          FIX_JAVASCRIPT_PRETTIER: true
-          FIX_YAML_PRETTIER: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LINTER_RULES_PATH: ./
           LOG_LEVEL: NOTICE
