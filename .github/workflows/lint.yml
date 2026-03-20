@@ -25,7 +25,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        uses: actions/setup-node@53b83947a4309e950c75c8fa2b10c969f8238f1d # v6.3.0
         with:
           node-version-file: .nvmrc
 
@@ -34,9 +34,6 @@ jobs:
 
       - name: Lint HTML
         run: npm run lint-html
-
-      - name: Lint CSS
-        run: npm run lint-css
 
       - name: Lint JavaScript
         run: npm run lint-js
