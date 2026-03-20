@@ -127,6 +127,38 @@
     </section>
 
     <section class="mb-5">
+      <h2 class="h5 mb-3">Switches, checks, radios & range</h2>
+      <div class="row g-3" style="max-width: 420px;">
+        <div class="col-12">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="demoSwitch" />
+            <label class="form-check-label" for="demoSwitch">Toggle switch</label>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="demoCheckbox" />
+            <label class="form-check-label" for="demoCheckbox">Checkbox</label>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="demoRadio" id="demoRadio1" checked />
+            <label class="form-check-label" for="demoRadio1">Radio option 1</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="demoRadio" id="demoRadio2" />
+            <label class="form-check-label" for="demoRadio2">Radio option 2</label>
+          </div>
+        </div>
+        <div class="col-12">
+          <label for="demoRange" class="form-label">Range slider <span class="text-body-secondary" id="demoRangeValue">30</span></label>
+          <input type="range" class="form-range" min="0" max="100" value="30" id="demoRange" />
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-5">
       <h2 class="h5 mb-3">Modal</h2>
       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#demoModal">Open modal</button>
       <div class="modal fade" id="demoModal" tabindex="-1" aria-labelledby="demoModalLabel" aria-hidden="true">
@@ -177,6 +209,35 @@
         <p class="mb-0 mt-2">Details content. Toggling plays a sound.</p>
       </details>
     </section>
+
+    <section class="mb-5">
+      <h2 class="h5 mb-3">Form validation</h2>
+      <form class="row g-3 needs-validation" id="validationForm" novalidate style="max-width: 480px;">
+        <div class="col-12">
+          <label for="validationName" class="form-label">Name</label>
+          <input type="text" class="form-control" id="validationName" required />
+          <div class="invalid-feedback">Please provide your name.</div>
+        </div>
+        <div class="col-12">
+          <label for="validationEmail" class="form-label">Email</label>
+          <input type="email" class="form-control" id="validationEmail" required />
+          <div class="invalid-feedback">Enter a valid email address.</div>
+        </div>
+        <div class="col-12">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="validationTerms" required />
+            <label class="form-check-label" for="validationTerms">Agree to terms</label>
+            <div class="invalid-feedback">You must agree before submitting.</div>
+          </div>
+        </div>
+        <div class="col-12">
+          <button class="btn btn-primary" type="submit">Submit form</button>
+        </div>
+        <div class="col-12">
+          <div id="validationMessage" class="form-text text-body-secondary">Submit to test valid/invalid sounds.</div>
+        </div>
+      </form>
+    </section>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
   <script>
@@ -196,6 +257,26 @@
       if (toastEl && toastBtn) {
         var toast = new bootstrap.Toast(toastEl);
         toastBtn.addEventListener('click', function () { toast.show(); });
+      }
+      var rangeInput = document.getElementById('demoRange');
+      var rangeValue = document.getElementById('demoRangeValue');
+      if (rangeInput && rangeValue) {
+        rangeInput.addEventListener('input', function () { rangeValue.textContent = rangeInput.value; });
+      }
+      var validationForm = document.getElementById('validationForm');
+      var validationMessage = document.getElementById('validationMessage');
+      if (validationForm) {
+        validationForm.addEventListener('submit', function (event) {
+          if (!validationForm.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (validationMessage) validationMessage.textContent = 'Please complete required fields.';
+          } else {
+            event.preventDefault();
+            if (validationMessage) validationMessage.textContent = 'Looks good — form is valid.';
+          }
+          validationForm.classList.add('was-validated');
+        });
       }
       var tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
       tooltipTriggerList.forEach(function (el) { new bootstrap.Tooltip(el); });

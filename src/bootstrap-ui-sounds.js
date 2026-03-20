@@ -41,7 +41,13 @@
     change: { freq: 550, duration: 0.045, type: 'sine', volume: 0.22 },
     toast: { freq: 580, duration: 0.06, type: 'sine', volume: 0.24 },
     detail: { freq: 500, duration: 0.055, type: 'sine', volume: 0.26 },
-    closeButton: { freq: 380, duration: 0.05, type: 'sine', volume: 0.24 }
+    closeButton: { freq: 380, duration: 0.05, type: 'sine', volume: 0.24 },
+    switchToggle: { freq: 700, duration: 0.05, type: 'square', volume: 0.25 },
+    checkbox: { freq: 620, duration: 0.045, type: 'square', volume: 0.24 },
+    radio: { freq: 680, duration: 0.045, type: 'triangle', volume: 0.23 },
+    range: { freq: 500, duration: 0.04, type: 'sine', volume: 0.22 },
+    formInvalid: { freq: 240, duration: 0.12, type: 'sawtooth', volume: 0.22 },
+    formValid: { freq: 520, duration: 0.1, type: 'triangle', volume: 0.22 }
   };
 
   function playSound(type, element) {
@@ -113,7 +119,22 @@
   });
   document.addEventListener('change', function (e) {
     const el = e.target;
-    if (el.matches('input, textarea, select')) playSound('change', el);
+    if (!el.matches('input, textarea, select')) return;
+    if (el.matches('input[type="range"]')) return;
+    if (el.matches('input[type="checkbox"]')) {
+      const isSwitch = el.matches('[role="switch"]') || (el.closest && el.closest('.form-switch'));
+      playSound(isSwitch ? 'switchToggle' : 'checkbox', el);
+      return;
+    }
+    if (el.matches('input[type="radio"]')) {
+      playSound('radio', el);
+      return;
+    }
+    playSound('change', el);
+  });
+  document.addEventListener('input', function (e) {
+    const el = e.target;
+    if (el.matches && el.matches('input[type="range"]')) playSound('range', el);
   });
 
   // Modals
@@ -153,6 +174,15 @@
     if (!e.target || e.target.tagName.toUpperCase() !== 'DETAILS') return;
     const soundType = e.target.open ? 'expand' : 'collapse';
     playSound(soundType, document.body);
+  }, true);
+
+  // Form validation
+  document.addEventListener('invalid', function (e) {
+    if (e.target && e.target.matches('input, select, textarea')) playSound('formInvalid', e.target);
+  }, true);
+  document.addEventListener('submit', function (e) {
+    const form = e.target;
+    if (form && form.checkValidity && form.checkValidity()) playSound('formValid', form);
   }, true);
 
   // Alerts – when appearing (new alert added to DOM)
