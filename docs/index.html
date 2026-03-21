@@ -155,8 +155,8 @@
           </div>
         </div>
         <div class="col-12">
-          <label for="demoRange" class="form-label">Range slider <span class="text-body-secondary" id="demoRangeValue">30</span></label>
-          <input type="range" class="form-range" min="0" max="100" value="30" id="demoRange" />
+          <label for="demoRange" class="form-label">Volume <span class="text-body-secondary" id="demoRangeValue">100</span>%</label>
+          <input type="range" class="form-range" min="0" max="100" value="100" id="demoRange" />
         </div>
       </div>
     </section>
@@ -264,7 +264,10 @@
       var rangeInput = document.getElementById('demoRange');
       var rangeValue = document.getElementById('demoRangeValue');
       if (rangeInput && rangeValue) {
-        rangeInput.addEventListener('input', function () { rangeValue.textContent = rangeInput.value; });
+        rangeInput.addEventListener('input', function () {
+          rangeValue.textContent = rangeInput.value;
+          document.documentElement.setAttribute('data-ui-sounds-volume', rangeInput.value);
+        });
       }
       var validationForm = document.getElementById('validationForm');
       var validationMessage = document.getElementById('validationMessage');
