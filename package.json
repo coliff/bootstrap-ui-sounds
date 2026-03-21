@@ -21,16 +21,16 @@
     "build": "node build.mjs",
     "lint": "npm run lint-html && npm run lint-js",
     "lint-html": "npx htmlhint **/*.html",
-    "lint-js": "npx eslint@8 **/*.mjs --fix",
+    "lint-js": "npx eslint@8 *.{js,mjs} --fix",
     "pa11y": "npx pa11y https://coliff.github.io/bootstrap-ui-sounds/",
-    "prettier": "npx prettier --write \"docs/**/*.{html,css,js}\"",
+    "prettier": "npx prettier --write \"*.{html,js,json,mjs,yml}\"",
     "serve": "npx serve docs",
-    "spellcheck": "npx cspell \"**/*.html\" --no-progress"
+    "spellcheck": "npx cspell \"*.{html,js,json,md,mjs,yml}\" --no-progress"
   },
   "devDependencies": {
     "terser": "5.46.1"
   },
   "volta": {
-    "node": "24.10.0"
+    "node": "24.14.0"
   }
 }

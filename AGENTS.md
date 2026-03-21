@@ -12,16 +12,7 @@
 - The script should be plain JavaScript and not use any frameworks or libraries.
 - Use modern JavaScript features and syntax and web audio API.
 
-## Components with sound
+## Pull Requests
 
-- [x] Alerts (when appearing)
-- [x] Buttons (when clicking)
-- [x] Carousel indicators (when clicking)
-- [x] Collapse (when collapsing and expanding)
-- [x] Dropdown
-- [x] Form inputs
-- [x] Modals
-- [x] Popovers
-- [x] Toast
-- [x] Tooltips
-- [x] Details / Summary
+- When making a pull request, ensure all checks pass and all tests are passing.
+- Pull request descriptions should be a list of bullet points of the changes made.
