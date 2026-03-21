@@ -6,13 +6,19 @@ on:
     branches:
       - main
 
+concurrency:
+  group: super-linter-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions: {}
 
 jobs:
   lint:
     name: Lint Code Base
     runs-on: ubuntu-latest
-    if: ${{ github.actor != 'dependabot[bot]' }}
+    if: >-
+      ${{ github.actor != 'dependabot[bot]'
+      && github.event.pull_request.draft == false }}
 
     permissions:
       contents: read
