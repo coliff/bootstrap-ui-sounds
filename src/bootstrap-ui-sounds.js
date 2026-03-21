@@ -6,6 +6,18 @@
   'use strict';
 
   let audioContext = null;
+  let globalVolume = 1.0; // normalized 0–1, driven by data-ui-sounds-volume attribute (0–100)
+
+  function readVolumeAttribute() {
+    const html = document.documentElement;
+    const body = document.body;
+    const raw = (html && html.getAttribute('data-ui-sounds-volume')) ||
+                (body && body.getAttribute('data-ui-sounds-volume'));
+    if (raw !== null && raw !== '') {
+      const num = Number(raw);
+      if (!isNaN(num)) globalVolume = Math.max(0, Math.min(100, num)) / 100;
+    }
+  }
 
   function getAudioContext() {
     if (!audioContext) {
@@ -52,6 +64,7 @@
 
   function playSound(type, element) {
     if (!isSoundsEnabled(element)) return;
+    if (globalVolume <= 0) return;
     const preset = soundPresets[type] || soundPresets.click;
     try {
       const ctx = getAudioContext();
@@ -64,7 +77,7 @@
       osc.type = preset.type;
       osc.frequency.setValueAtTime(preset.freq, now);
       gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(preset.volume, now + 0.008);
+      gain.gain.linearRampToValueAtTime(preset.volume * globalVolume, now + 0.008);
       gain.gain.exponentialRampToValueAtTime(0.001, now + preset.duration);
       osc.start(now);
       osc.stop(now + preset.duration);
@@ -202,6 +215,18 @@
   } else {
     document.addEventListener('DOMContentLoaded', function () {
       alertObserver.observe(document.body, { childList: true, subtree: true });
+    });
+  }
+
+  // Volume – read data-ui-sounds-volume attribute and watch for changes
+  readVolumeAttribute();
+  const volumeObserver = new MutationObserver(readVolumeAttribute);
+  volumeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-ui-sounds-volume'] });
+  if (document.body) {
+    volumeObserver.observe(document.body, { attributes: true, attributeFilter: ['data-ui-sounds-volume'] });
+  } else {
+    document.addEventListener('DOMContentLoaded', function () {
+      volumeObserver.observe(document.body, { attributes: true, attributeFilter: ['data-ui-sounds-volume'] });
     });
   }
 })();
