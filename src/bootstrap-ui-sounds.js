@@ -54,7 +54,8 @@
     toast: { freq: 580, duration: 0.06, type: 'sine', volume: 0.24 },
     detail: { freq: 500, duration: 0.055, type: 'sine', volume: 0.26 },
     closeButton: { freq: 380, duration: 0.05, type: 'sine', volume: 0.24 },
-    switchToggle: { freq: 700, duration: 0.05, type: 'square', volume: 0.25 },
+    switchOn: { freq: 780, duration: 0.05, type: 'square', volume: 0.25 },
+    switchOff: { freq: 420, duration: 0.055, type: 'triangle', volume: 0.23 },
     checkbox: { freq: 620, duration: 0.045, type: 'square', volume: 0.24 },
     radio: { freq: 680, duration: 0.045, type: 'triangle', volume: 0.23 },
     range: { freq: 500, duration: 0.04, type: 'sine', volume: 0.22 },
@@ -136,7 +137,7 @@
     if (el.matches('input[type="range"]')) return;
     if (el.matches('input[type="checkbox"]')) {
       const isSwitch = el.matches('[role="switch"]') || (el.closest && el.closest('.form-switch'));
-      playSound(isSwitch ? 'switchToggle' : 'checkbox', el);
+      playSound(isSwitch ? (el.checked ? 'switchOn' : 'switchOff') : 'checkbox', el);
       return;
     }
     if (el.matches('input[type="radio"]')) {
