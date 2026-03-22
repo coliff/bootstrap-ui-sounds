@@ -1,531 +1,387 @@
 <!doctype html>
 <html lang="en" data-ui-sounds="true" data-bs-theme="auto">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bootstrap UI Sounds</title>
-    <script>
-      (function () {
-        var stored = localStorage.getItem("theme");
-        var dark =
-          stored === "dark" ||
-          (!stored &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches);
-        document.documentElement.setAttribute(
-          "data-bs-theme",
-          dark ? "dark" : "light",
-        );
-      })();
-    </script>
-    <style>
-      main section {
-        scroll-margin-top: 1rem;
-      }
-    </style>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>🔊</text></svg>"
-    />
-    <link rel="author" href="https://christianoliff.com/" />
-    <link
-      rel="canonical"
-      href="https://coliff.github.io/bootstrap-ui-sounds/"
-    />
-    <link
-      rel="license"
-      href="https://github.com/coliff/bootstrap-ui-sounds/blob/main/LICENSE"
-    />
 
-    <meta name="author" content="Christian Oliff" />
-    <meta name="fediverse:creator" content="@christianoliff@mastodon.social" />
-    <meta name="description" content="Test page for Bootstrap UI Sounds" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bootstrap UI Sounds</title>
+  <script>
+    (function () {
+      var stored = localStorage.getItem("theme");
+      var dark =
+        stored === "dark" ||
+        (!stored &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches);
+      document.documentElement.setAttribute(
+        "data-bs-theme",
+        dark ? "dark" : "light",
+      );
+    })();
+  </script>
+  <style>
+    main section {
+      scroll-margin-top: 1rem;
+    }
 
-    <script src="script.js" defer></script>
-  </head>
-  <body>
-    <header class="border-bottom mb-4">
-      <div class="container py-4">
-        <h1 class="h2 mb-0">Bootstrap UI Sounds</h1>
-        <p class="text-body-secondary mb-0 mt-1">
-          Sounds are enabled via <code>data-ui-sounds</code> on this page.
-          Interact with each component to hear feedback.
-        </p>
+    a[href^="https://"]::after {
+      content: "";
+      width: 11px;
+      height: 11px;
+      margin-left: 4px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z'/%3E%3Cpath fill-rule='evenodd' d='M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z'/%3E%3C/svg%3E");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      display: inline-block;
+    }
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>🔊</text></svg>" />
+  <link rel="author" href="https://christianoliff.com/" />
+  <link rel="canonical" href="https://coliff.github.io/bootstrap-ui-sounds/" />
+  <link rel="license" href="https://github.com/coliff/bootstrap-ui-sounds/blob/main/LICENSE" />
+
+  <meta name="author" content="Christian Oliff" />
+  <meta name="fediverse:creator" content="@christianoliff@mastodon.social" />
+  <meta name="description" content="Test page for Bootstrap UI Sounds" />
+
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <header class="border-bottom mb-4">
+    <div class="container py-4">
+      <h1 class="h2 mb-0">Bootstrap UI Sounds</h1>
+      <p class="text-body-secondary mb-0 mt-1">
+        Sounds are enabled via the <code>data-ui-sounds</code> attribute on this page.
+        Interact with each component to hear feedback.
+      </p>
+      <p class="mb-0 mt-2">
+        <a class="link-secondary" href="https://github.com/coliff/bootstrap-ui-sounds" target="_blank">
+          GitHub
+        </a>
+      </p>
+    </div>
+  </header>
+  <main class="container pb-5">
+    <section class="mb-5">
+      <h2 class="h5 mb-3">Alerts</h2>
+      <div id="liveAlertPlaceholder"></div>
+      <button type="button" class="btn btn-primary" id="liveAlertBtn">
+        Show live alert
+      </button>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="h5 mb-3">Buttons</h2>
+      <div class="d-flex flex-wrap gap-2">
+        <button type="button" class="btn btn-primary">Primary</button>
+        <button type="button" class="btn btn-secondary">Secondary</button>
+        <button type="button" class="btn btn-success">Success</button>
+        <button type="button" class="btn btn-danger">Danger</button>
+        <button type="button" class="btn btn-warning">Warning</button>
+        <button type="button" class="btn btn-info">Info</button>
+        <button type="button" class="btn btn-light">Light</button>
+        <button type="button" class="btn btn-dark">Dark</button>
       </div>
-    </header>
-    <main class="container pb-5">
-      <section class="mb-5">
-        <h2 class="h5 mb-3">Alerts</h2>
-        <div id="liveAlertPlaceholder"></div>
-        <button type="button" class="btn btn-primary" id="liveAlertBtn">
-          Show live alert
+    </section>
+
+    <section class="mb-5">
+      <h2 class="h5 mb-3">Carousel</h2>
+      <div id="demoCarousel" class="carousel slide" style="max-width: 400px">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#demoCarousel" data-bs-slide-to="0" class="active" aria-current="true"
+            aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#demoCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#demoCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="carousel-caption d-none d-md-block">
+              <p>Slide 1</p>
+            </div>
+            <div class="bg-primary bg-opacity-25 rounded" style="height: 200px"></div>
+          </div>
+          <div class="carousel-item">
+            <div class="carousel-caption d-none d-md-block">
+              <p>Slide 2</p>
+            </div>
+            <div class="bg-success bg-opacity-25 rounded" style="height: 200px"></div>
+          </div>
+          <div class="carousel-item">
+            <div class="carousel-caption d-none d-md-block">
+              <p>Slide 3</p>
+            </div>
+            <div class="bg-info bg-opacity-25 rounded" style="height: 200px"></div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#demoCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
         </button>
-      </section>
-
-      <section class="mb-5">
-        <h2 class="h5 mb-3">Buttons</h2>
-        <div class="d-flex flex-wrap gap-2">
-          <button type="button" class="btn btn-primary">Primary</button>
-          <button type="button" class="btn btn-secondary">Secondary</button>
-          <button type="button" class="btn btn-success">Success</button>
-          <button type="button" class="btn btn-danger">Danger</button>
-          <button type="button" class="btn btn-warning">Warning</button>
-          <button type="button" class="btn btn-info">Info</button>
-          <button type="button" class="btn btn-light">Light</button>
-          <button type="button" class="btn btn-dark">Dark</button>
-        </div>
-      </section>
-
-      <section class="mb-5">
-        <h2 class="h5 mb-3">Carousel</h2>
-        <div id="demoCarousel" class="carousel slide" style="max-width: 400px">
-          <div class="carousel-indicators">
-            <button
-              type="button"
-              data-bs-target="#demoCarousel"
-              data-bs-slide-to="0"
-              class="active"
-              aria-current="true"
-              aria-label="Slide 1"
-            ></button>
-            <button
-              type="button"
-              data-bs-target="#demoCarousel"
-              data-bs-slide-to="1"
-              aria-label="Slide 2"
-            ></button>
-            <button
-              type="button"
-              data-bs-target="#demoCarousel"
-              data-bs-slide-to="2"
-              aria-label="Slide 3"
-            ></button>
-          </div>
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <div class="carousel-caption d-none d-md-block">
-                <p>Slide 1</p>
-              </div>
-              <div
-                class="bg-primary bg-opacity-25 rounded"
-                style="height: 200px"
-              ></div>
-            </div>
-            <div class="carousel-item">
-              <div class="carousel-caption d-none d-md-block">
-                <p>Slide 2</p>
-              </div>
-              <div
-                class="bg-success bg-opacity-25 rounded"
-                style="height: 200px"
-              ></div>
-            </div>
-            <div class="carousel-item">
-              <div class="carousel-caption d-none d-md-block">
-                <p>Slide 3</p>
-              </div>
-              <div
-                class="bg-info bg-opacity-25 rounded"
-                style="height: 200px"
-              ></div>
-            </div>
-          </div>
-          <button
-            class="carousel-control-prev"
-            type="button"
-            data-bs-target="#demoCarousel"
-            data-bs-slide="prev"
-          >
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button
-            class="carousel-control-next"
-            type="button"
-            data-bs-target="#demoCarousel"
-            data-bs-slide="next"
-          >
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
-        </div>
-      </section>
-
-      <section class="mb-5">
-        <h2 class="h5 mb-3">Collapse</h2>
-        <p>
-          <button
-            class="btn btn-outline-primary"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseDemo"
-            aria-expanded="false"
-            aria-controls="collapseDemo"
-          >
-            Toggle collapse
-          </button>
-        </p>
-        <div class="collapse" id="collapseDemo">
-          <div class="card card-body">
-            Collapsible content. Opening and closing plays a sound.
-          </div>
-        </div>
-      </section>
-
-      <section class="mb-5">
-        <h2 class="h5 mb-3">Dropdown</h2>
-        <div class="dropdown">
-          <button
-            class="btn btn-secondary dropdown-toggle"
-            type="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Dropdown
-          </button>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else</a></li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="mb-5">
-        <h2 class="h5 mb-3">Form inputs</h2>
-        <div class="row g-3" style="max-width: 400px">
-          <div class="col-12">
-            <label for="inputText" class="form-label">Text</label>
-            <input
-              type="text"
-              class="form-control"
-              id="inputText"
-              placeholder="Focus and change"
-            />
-          </div>
-          <div class="col-12">
-            <label for="inputSelect" class="form-label">Select</label>
-            <select class="form-select" id="inputSelect">
-              <option>Option 1</option>
-              <option>Option 2</option>
-              <option>Option 3</option>
-            </select>
-          </div>
-          <div class="col-12">
-            <label for="inputTextarea" class="form-label">Textarea</label>
-            <textarea
-              class="form-control"
-              id="inputTextarea"
-              rows="2"
-              placeholder="Focus and type"
-            ></textarea>
-          </div>
-        </div>
-      </section>
-
-      <section class="mb-5">
-        <h2 class="h5 mb-3">Switches, checks, radios & range</h2>
-        <div class="row g-3" style="max-width: 420px">
-          <div class="col-12">
-            <div class="form-check form-switch">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                role="switch"
-                id="demoSwitch"
-              />
-              <label class="form-check-label" for="demoSwitch"
-                >Toggle switch</label
-              >
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value=""
-                id="demoCheckbox"
-              />
-              <label class="form-check-label" for="demoCheckbox"
-                >Checkbox</label
-              >
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="demoRadio"
-                id="demoRadio1"
-                checked
-              />
-              <label class="form-check-label" for="demoRadio1"
-                >Radio option 1</label
-              >
-            </div>
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="demoRadio"
-                id="demoRadio2"
-              />
-              <label class="form-check-label" for="demoRadio2"
-                >Radio option 2</label
-              >
-            </div>
-          </div>
-          <div class="col-12">
-            <label for="demoRange" class="form-label"
-              >Volume
-              <span class="text-body-secondary" id="demoRangeValue">100</span
-              >%</label
-            >
-            <input
-              type="range"
-              class="form-range"
-              min="0"
-              max="100"
-              value="100"
-              id="demoRange"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section class="mb-5">
-        <h2 class="h5 mb-3">Modal</h2>
-        <button
-          type="button"
-          class="btn btn-primary"
-          data-bs-toggle="modal"
-          data-bs-target="#demoModal"
-        >
-          Open modal
+        <button class="carousel-control-next" type="button" data-bs-target="#demoCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
         </button>
-        <div
-          class="modal fade"
-          id="demoModal"
-          tabindex="-1"
-          aria-labelledby="demoModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h3 class="modal-title fs-5" id="demoModalLabel">
-                  Modal title
-                </h3>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                Opening and closing this modal plays a sound.
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button type="button" class="btn btn-primary">Save</button>
-              </div>
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="h5 mb-3">Collapse</h2>
+      <p>
+        <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDemo"
+          aria-expanded="false" aria-controls="collapseDemo">
+          Toggle collapse
+        </button>
+      </p>
+      <div class="collapse" id="collapseDemo">
+        <div class="card card-body">
+          Collapsible content. Opening and closing plays a sound.
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="h5 mb-3">Dropdown</h2>
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Dropdown
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#">Action</a></li>
+          <li><a class="dropdown-item" href="#">Another action</a></li>
+          <li><a class="dropdown-item" href="#">Something else</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="h5 mb-3">Form inputs</h2>
+      <div class="row g-3" style="max-width: 400px">
+        <div class="col-12">
+          <label for="inputText" class="form-label">Text</label>
+          <input type="text" class="form-control" id="inputText" placeholder="Focus and change" />
+        </div>
+        <div class="col-12">
+          <label for="inputSelect" class="form-label">Select</label>
+          <select class="form-select" id="inputSelect">
+            <option>Option 1</option>
+            <option>Option 2</option>
+            <option>Option 3</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <label for="inputTextarea" class="form-label">Textarea</label>
+          <textarea class="form-control" id="inputTextarea" rows="2" placeholder="Focus and type"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="h5 mb-3">Switches, checks, radios & range</h2>
+      <div class="row g-3" style="max-width: 420px">
+        <div class="col-12">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="demoSwitch" />
+            <label class="form-check-label" for="demoSwitch">Toggle switch</label>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="demoCheckbox" />
+            <label class="form-check-label" for="demoCheckbox">Checkbox</label>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="demoRadio" id="demoRadio1" checked />
+            <label class="form-check-label" for="demoRadio1">Radio option 1</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="demoRadio" id="demoRadio2" />
+            <label class="form-check-label" for="demoRadio2">Radio option 2</label>
+          </div>
+        </div>
+        <div class="col-12">
+          <label for="demoRange" class="form-label">Volume
+            <span class="text-body-secondary" id="demoRangeValue">100</span>%</label>
+          <input type="range" class="form-range" min="0" max="100" value="100" id="demoRange" />
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="h5 mb-3">Modal</h2>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#demoModal">
+        Open modal
+      </button>
+      <div class="modal fade" id="demoModal" tabindex="-1" aria-labelledby="demoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 class="modal-title fs-5" id="demoModalLabel">
+                Modal title
+              </h3>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Opening and closing this modal plays a sound.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Close
+              </button>
+              <button type="button" class="btn btn-primary">Save</button>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="mb-5">
-        <h2 class="h5 mb-3">Popover</h2>
-        <button
-          type="button"
-          class="btn btn-primary"
-          data-bs-toggle="popover"
-          data-bs-title="Popover"
-          data-bs-content="Opening and closing plays a sound."
-        >
-          Toggle popover
-        </button>
-      </section>
+    <section class="mb-5">
+      <h2 class="h5 mb-3">Popover</h2>
+      <button type="button" class="btn btn-primary" data-bs-toggle="popover" data-bs-title="Popover"
+        data-bs-content="Opening and closing plays a sound.">
+        Toggle popover
+      </button>
+    </section>
 
-      <section class="mb-5">
-        <h2 class="h5 mb-3">Toast</h2>
-        <button type="button" class="btn btn-primary" id="toastBtn">
-          Show toast
-        </button>
-        <div class="toast-container position-fixed bottom-0 end-0 p-3">
-          <div id="demoToast" class="toast" role="alert">
-            <div class="toast-header">
-              <strong class="me-auto">Toast</strong>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="toast"
-                aria-label="Close"
-              ></button>
+    <section class="mb-5">
+      <h2 class="h5 mb-3">Toast</h2>
+      <button type="button" class="btn btn-primary" id="toastBtn">
+        Show toast
+      </button>
+      <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="demoToast" class="toast" role="alert">
+          <div class="toast-header">
+            <strong class="me-auto">Toast</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">Show and hide plays a sound.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="h5 mb-3">Tooltips</h2>
+      <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-title="Tooltip text">
+        Hover for tooltip
+      </button>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="h5 mb-3">Details / Summary</h2>
+      <details class="border rounded p-3">
+        <summary>Click to expand</summary>
+        <p class="mb-0 mt-2">Details content. Toggling plays a sound.</p>
+      </details>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="h5 mb-3">Form validation</h2>
+      <form class="row g-3 needs-validation" id="validationForm" novalidate style="max-width: 480px">
+        <div class="col-12">
+          <label for="validationName" class="form-label">Name</label>
+          <input type="text" class="form-control" id="validationName" required />
+          <div class="invalid-feedback">Please provide your name.</div>
+        </div>
+        <div class="col-12">
+          <label for="validationEmail" class="form-label">Email</label>
+          <input type="email" class="form-control" id="validationEmail" required />
+          <div class="invalid-feedback">Enter a valid email address.</div>
+        </div>
+        <div class="col-12">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="validationTerms" required />
+            <label class="form-check-label" for="validationTerms">Agree to terms</label>
+            <div class="invalid-feedback">
+              You must agree before submitting.
             </div>
-            <div class="toast-body">Show and hide plays a sound.</div>
           </div>
         </div>
-      </section>
-
-      <section class="mb-5">
-        <h2 class="h5 mb-3">Tooltips</h2>
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-toggle="tooltip"
-          data-bs-title="Tooltip text"
-        >
-          Hover for tooltip
-        </button>
-      </section>
-
-      <section class="mb-5">
-        <h2 class="h5 mb-3">Details / Summary</h2>
-        <details class="border rounded p-3">
-          <summary>Click to expand</summary>
-          <p class="mb-0 mt-2">Details content. Toggling plays a sound.</p>
-        </details>
-      </section>
-
-      <section class="mb-5">
-        <h2 class="h5 mb-3">Form validation</h2>
-        <form
-          class="row g-3 needs-validation"
-          id="validationForm"
-          novalidate
-          style="max-width: 480px"
-        >
-          <div class="col-12">
-            <label for="validationName" class="form-label">Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="validationName"
-              required
-            />
-            <div class="invalid-feedback">Please provide your name.</div>
+        <div class="col-12">
+          <button class="btn btn-primary" type="submit">Submit form</button>
+        </div>
+        <div class="col-12">
+          <div id="validationMessage" class="form-text text-body-secondary">
+            Submit to test valid/invalid sounds.
           </div>
-          <div class="col-12">
-            <label for="validationEmail" class="form-label">Email</label>
-            <input
-              type="email"
-              class="form-control"
-              id="validationEmail"
-              required
-            />
-            <div class="invalid-feedback">Enter a valid email address.</div>
-          </div>
-          <div class="col-12">
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value=""
-                id="validationTerms"
-                required
-              />
-              <label class="form-check-label" for="validationTerms"
-                >Agree to terms</label
-              >
-              <div class="invalid-feedback">
-                You must agree before submitting.
-              </div>
-            </div>
-          </div>
-          <div class="col-12">
-            <button class="btn btn-primary" type="submit">Submit form</button>
-          </div>
-          <div class="col-12">
-            <div id="validationMessage" class="form-text text-body-secondary">
-              Submit to test valid/invalid sounds.
-            </div>
-          </div>
-        </form>
-      </section>
-    </main>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      (function () {
-        var placeholder = document.getElementById("liveAlertPlaceholder");
-        var trigger = document.getElementById("liveAlertBtn");
-        function appendAlert(message, type) {
-          var wrapper = document.createElement("div");
-          wrapper.innerHTML =
-            '<div class="alert alert-' +
-            type +
-            ' alert-dismissible fade show" role="alert">' +
-            message +
-            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-          placeholder.append(wrapper);
-        }
-        if (trigger) {
-          trigger.addEventListener("click", function () {
-            appendAlert("Live alert added!", "success");
-          });
-        }
-        var toastEl = document.getElementById("demoToast");
-        var toastBtn = document.getElementById("toastBtn");
-        if (toastEl && toastBtn) {
-          var toast = new bootstrap.Toast(toastEl);
-          toastBtn.addEventListener("click", function () {
-            toast.show();
-          });
-        }
-        var rangeInput = document.getElementById("demoRange");
-        var rangeValue = document.getElementById("demoRangeValue");
-        if (rangeInput && rangeValue) {
-          rangeInput.addEventListener("input", function () {
-            rangeValue.textContent = rangeInput.value;
-            document.documentElement.setAttribute(
-              "data-ui-sounds-volume",
-              rangeInput.value,
-            );
-          });
-        }
-        var validationForm = document.getElementById("validationForm");
-        var validationMessage = document.getElementById("validationMessage");
-        if (validationForm) {
-          validationForm.addEventListener("submit", function (event) {
-            if (!validationForm.checkValidity()) {
-              event.preventDefault();
-              event.stopPropagation();
-              if (validationMessage)
-                validationMessage.textContent =
-                  "Please complete required fields.";
-            } else {
-              event.preventDefault();
-              if (validationMessage)
-                validationMessage.textContent = "Looks good — form is valid.";
-            }
-            validationForm.classList.add("was-validated");
-          });
-        }
-        var tooltipTriggerList = document.querySelectorAll(
-          '[data-bs-toggle="tooltip"]',
-        );
-        tooltipTriggerList.forEach(function (el) {
-          new bootstrap.Tooltip(el);
+        </div>
+      </form>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    (function () {
+      var placeholder = document.getElementById("liveAlertPlaceholder");
+      var trigger = document.getElementById("liveAlertBtn");
+      function appendAlert(message, type) {
+        var wrapper = document.createElement("div");
+        wrapper.innerHTML =
+          '<div class="alert alert-' +
+          type +
+          ' alert-dismissible fade show" role="alert">' +
+          message +
+          '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+        placeholder.append(wrapper);
+      }
+      if (trigger) {
+        trigger.addEventListener("click", function () {
+          appendAlert("Live alert added!", "success");
         });
-        var popoverTriggerList = document.querySelectorAll(
-          '[data-bs-toggle="popover"]',
-        );
-        popoverTriggerList.forEach(function (el) {
-          new bootstrap.Popover(el);
+      }
+      var toastEl = document.getElementById("demoToast");
+      var toastBtn = document.getElementById("toastBtn");
+      if (toastEl && toastBtn) {
+        var toast = new bootstrap.Toast(toastEl);
+        toastBtn.addEventListener("click", function () {
+          toast.show();
         });
-      })();
-    </script>
-  </body>
+      }
+      var rangeInput = document.getElementById("demoRange");
+      var rangeValue = document.getElementById("demoRangeValue");
+      if (rangeInput && rangeValue) {
+        rangeInput.addEventListener("input", function () {
+          rangeValue.textContent = rangeInput.value;
+          document.documentElement.setAttribute(
+            "data-ui-sounds-volume",
+            rangeInput.value,
+          );
+        });
+      }
+      var validationForm = document.getElementById("validationForm");
+      var validationMessage = document.getElementById("validationMessage");
+      if (validationForm) {
+        validationForm.addEventListener("submit", function (event) {
+          if (!validationForm.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (validationMessage)
+              validationMessage.textContent =
+                "Please complete required fields.";
+          } else {
+            event.preventDefault();
+            if (validationMessage)
+              validationMessage.textContent = "Looks good — form is valid.";
+          }
+          validationForm.classList.add("was-validated");
+        });
+      }
+      var tooltipTriggerList = document.querySelectorAll(
+        '[data-bs-toggle="tooltip"]',
+      );
+      tooltipTriggerList.forEach(function (el) {
+        new bootstrap.Tooltip(el);
+      });
+      var popoverTriggerList = document.querySelectorAll(
+        '[data-bs-toggle="popover"]',
+      );
+      popoverTriggerList.forEach(function (el) {
+        new bootstrap.Popover(el);
+      });
+    })();
+  </script>
+</body>
+
 </html>

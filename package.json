@@ -1,9 +1,8 @@
 {
   "name": "bootstrap-ui-sounds",
   "version": "0.0.1",
-  "private": true,
   "description": "UI Sounds for Bootstrap",
-  "homepage": "https://github.com/coliff/bootstrap-ui-sounds#readme",
+  "homepage": "https://coliff.github.io/bootstrap-ui-sounds/",
   "bugs": {
     "url": "https://github.com/coliff/bootstrap-ui-sounds/issues"
   },
