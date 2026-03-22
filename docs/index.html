@@ -52,7 +52,7 @@
 <body>
   <header class="border-bottom mb-4">
     <div class="container py-4">
-      <h1 class="h2 mb-0">Bootstrap UI Sounds</h1>
+      <h1 class="h2 mb-0">Bootstrap UI Sounds 🔊</h1>
       <p class="text-body-secondary mb-0 mt-1">
         Sounds are enabled via the <code>data-ui-sounds</code> attribute on this page.
         Interact with each component to hear feedback.
@@ -353,10 +353,7 @@
       if (rangeInput && rangeValue) {
         rangeInput.addEventListener("input", function () {
           rangeValue.textContent = rangeInput.value;
-          document.documentElement.setAttribute(
-            "data-ui-sounds-volume",
-            rangeInput.value,
-          );
+          rangeInput.setAttribute("data-ui-sounds-volume", rangeInput.value);
         });
       }
       var validationForm = document.getElementById("validationForm");

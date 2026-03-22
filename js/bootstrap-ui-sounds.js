@@ -10,17 +10,29 @@
   'use strict';
 
   let audioContext = null;
-  let globalVolume = 1.0; // normalized 0–1, driven by data-ui-sounds-volume attribute (0–100)
 
-  function readVolumeAttribute() {
-    const html = document.documentElement;
-    const body = document.body;
-    const raw = (html && html.getAttribute('data-ui-sounds-volume')) ||
-                (body && body.getAttribute('data-ui-sounds-volume'));
-    if (raw !== null && raw !== '') {
-      const num = Number(raw);
-      if (!isNaN(num)) globalVolume = Math.max(0, Math.min(100, num)) / 100;
+  /** Parse data-ui-sounds-volume (0–100) on a single node; null if unset/invalid. */
+  function parseVolumeAttribute(node) {
+    if (!node || !node.getAttribute) return null;
+    const raw = node.getAttribute('data-ui-sounds-volume');
+    if (raw === null || raw === '') return null;
+    const num = Number(raw);
+    if (isNaN(num)) return null;
+    return Math.max(0, Math.min(100, num)) / 100;
+  }
+
+  /**
+   * Volume for a given interaction: first data-ui-sounds-volume on the element or an ancestor
+   * (closest wins). If none, full volume (1). Page-wide control: set the attribute on <html> or <body>.
+   */
+  function getEffectiveVolume(element) {
+    let node = element;
+    while (node && node.nodeType === 1) {
+      const v = parseVolumeAttribute(node);
+      if (v !== null) return v;
+      node = node.parentElement;
     }
+    return 1.0;
   }
 
   function getAudioContext() {
@@ -72,7 +84,8 @@
 
   function playSound(type, element) {
     if (!isSoundsEnabled(element)) return;
-    if (globalVolume <= 0) return;
+    const effectiveVolume = getEffectiveVolume(element);
+    if (effectiveVolume <= 0) return;
     const preset = soundPresets[type] || soundPresets.click;
     try {
       const ctx = getAudioContext();
@@ -85,7 +98,7 @@
       osc.type = preset.type;
       osc.frequency.setValueAtTime(preset.freq, now);
       gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(preset.volume * globalVolume, now + 0.008);
+      gain.gain.linearRampToValueAtTime(preset.volume * effectiveVolume, now + 0.008);
       gain.gain.exponentialRampToValueAtTime(0.001, now + preset.duration);
       osc.start(now);
       osc.stop(now + preset.duration);
@@ -240,15 +253,4 @@
     });
   }
 
-  // Volume – read data-ui-sounds-volume attribute and watch for changes
-  readVolumeAttribute();
-  const volumeObserver = new MutationObserver(readVolumeAttribute);
-  volumeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-ui-sounds-volume'] });
-  if (document.body) {
-    volumeObserver.observe(document.body, { attributes: true, attributeFilter: ['data-ui-sounds-volume'] });
-  } else {
-    document.addEventListener('DOMContentLoaded', function () {
-      volumeObserver.observe(document.body, { attributes: true, attributeFilter: ['data-ui-sounds-volume'] });
-    });
-  }
 })();
