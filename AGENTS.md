@@ -3,7 +3,7 @@
 <!-- https://agents.md -->
 
 - This is a project to create UI sounds for Bootstrap.
-- Every Bootstrapcomponent which can be interacted with should have a sound.
+- Every Bootstrap component which can be interacted with should have a sound.
 
 ## Pull Requests
 

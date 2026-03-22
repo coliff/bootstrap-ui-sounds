@@ -2,6 +2,15 @@
   "name": "bootstrap-ui-sounds",
   "version": "0.0.1",
   "description": "UI Sounds for Bootstrap",
+  "main": "js/bootstrap-ui-sounds.js",
+  "unpkg": "js/bootstrap-ui-sounds.min.js",
+  "jsdelivr": "js/bootstrap-ui-sounds.min.js",
+  "sideEffects": true,
+  "keywords": [
+    "web-audio",
+    "audio-feedback",
+    "bootstrap-5"
+  ],
   "homepage": "https://coliff.github.io/bootstrap-ui-sounds/",
   "bugs": {
     "url": "https://github.com/coliff/bootstrap-ui-sounds/issues"
@@ -15,6 +24,9 @@
     "url": "https://paypal.me/coliff"
   },
   "license": "MIT",
+  "files": [
+    "js"
+  ],
   "author": "Christian Oliff (https://christianoliff.com)",
   "scripts": {
     "build": "node build.mjs",
