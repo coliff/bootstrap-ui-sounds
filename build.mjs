@@ -1,6 +1,6 @@
 /**
- * Build script: minifies js/bootstrap-ui-sounds.js and writes
- * bootstrap-ui-sounds.min.js alongside the source, plus docs/bootstrap-ui-sounds.min.js for the demo.
+ * Build script: syncs package version into the js banner, minifies js/bootstrap-ui-sounds.js,
+ * writes bootstrap-ui-sounds.min.js alongside the source, plus docs/bootstrap-ui-sounds.min.js for the demo.
  */
 import fs from "fs";
 import path from "path";
@@ -22,7 +22,12 @@ const srcPath = path.join(root, "js", "bootstrap-ui-sounds.js");
 const minPath = path.join(path.dirname(srcPath), "bootstrap-ui-sounds.min.js");
 const docsPath = path.join(root, "docs", "bootstrap-ui-sounds.min.js");
 
-const code = fs.readFileSync(srcPath, "utf8");
+let code = fs.readFileSync(srcPath, "utf8");
+code = code.replace(
+  /^(\s*\*\s*Bootstrap UI Sounds)(?:\s+v[\d.]+)?(\s*)$/m,
+  `$1 v${version}$2`
+);
+fs.writeFileSync(srcPath, code, "utf8");
 const result = await minify(code, {
   compress: { passes: 1 },
   mangle: false,
@@ -35,4 +40,6 @@ fs.mkdirSync(path.dirname(minPath), { recursive: true });
 fs.writeFileSync(minPath, minified, "utf8");
 fs.mkdirSync(path.dirname(docsPath), { recursive: true });
 fs.writeFileSync(docsPath, minified, "utf8");
-console.log(`Built ${path.relative(root, minPath)} and ${path.relative(root, docsPath)}`);
+console.log(
+  `Updated ${path.relative(root, srcPath)}; built ${path.relative(root, minPath)} and ${path.relative(root, docsPath)}`
+);
