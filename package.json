@@ -1,9 +1,17 @@
 {
   "name": "bootstrap-ui-sounds",
   "version": "0.0.1",
-  "private": true,
   "description": "UI Sounds for Bootstrap",
-  "homepage": "https://github.com/coliff/bootstrap-ui-sounds#readme",
+  "main": "js/bootstrap-ui-sounds.js",
+  "unpkg": "js/bootstrap-ui-sounds.min.js",
+  "jsdelivr": "js/bootstrap-ui-sounds.min.js",
+  "sideEffects": true,
+  "keywords": [
+    "web-audio",
+    "audio-feedback",
+    "bootstrap-5"
+  ],
+  "homepage": "https://coliff.github.io/bootstrap-ui-sounds/",
   "bugs": {
     "url": "https://github.com/coliff/bootstrap-ui-sounds/issues"
   },
@@ -16,12 +24,15 @@
     "url": "https://paypal.me/coliff"
   },
   "license": "MIT",
+  "files": [
+    "js"
+  ],
   "author": "Christian Oliff (https://christianoliff.com)",
   "scripts": {
     "build": "node build.mjs",
     "lint": "npm run lint-html && npm run lint-js",
     "lint-html": "npx htmlhint **/*.html",
-    "lint-js": "npx eslint@8 *.{js,mjs} --fix",
+    "lint-js": "npx eslint@8 build.mjs js/bootstrap-ui-sounds.js --fix",
     "pa11y": "npx pa11y https://coliff.github.io/bootstrap-ui-sounds/",
     "prettier": "npx prettier --write \"*.{html,js,json,mjs,yml}\"",
     "serve": "npx serve docs",

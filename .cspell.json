@@ -1,11 +1,12 @@
 {
   "version": "0.2",
   "language": "en",
-  "allowCompoundWords": true,
   "words": [
     "coliff",
     "COMMITLINT",
     "cooldown",
+    "Cpath",
+    "Csvg",
     "fediverse",
     "htmlhint",
     "nvmrc",

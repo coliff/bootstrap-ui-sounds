@@ -1,5 +1,6 @@
 /**
- * Build script: minifies src/bootstrap-ui-sounds.js to docs/script.js
+ * Build script: minifies js/bootstrap-ui-sounds.js and writes
+ * bootstrap-ui-sounds.min.js alongside the source, plus docs/bootstrap-ui-sounds.min.js for the demo.
  */
 import fs from "fs";
 import path from "path";
@@ -8,8 +9,18 @@ import { minify } from "terser";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname);
-const srcPath = path.join(root, "src", "bootstrap-ui-sounds.js");
-const outPath = path.join(root, "docs", "script.js");
+const pkgPath = path.join(root, "package.json");
+const { version } = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
+const banner = `/*!
+ * Bootstrap UI Sounds v${version}
+ * Copyright 2026 C.Oliff
+ * Licensed under MIT
+ * https://github.com/coliff/bootstrap-ui-sounds
+ */
+`;
+const srcPath = path.join(root, "js", "bootstrap-ui-sounds.js");
+const minPath = path.join(path.dirname(srcPath), "bootstrap-ui-sounds.min.js");
+const docsPath = path.join(root, "docs", "bootstrap-ui-sounds.min.js");
 
 const code = fs.readFileSync(srcPath, "utf8");
 const result = await minify(code, {
@@ -19,6 +30,9 @@ const result = await minify(code, {
 });
 
 if (result.error) throw result.error;
-fs.mkdirSync(path.dirname(outPath), { recursive: true });
-fs.writeFileSync(outPath, result.code, "utf8");
-console.log("Built docs/script.js");
+const minified = banner + result.code;
+fs.mkdirSync(path.dirname(minPath), { recursive: true });
+fs.writeFileSync(minPath, minified, "utf8");
+fs.mkdirSync(path.dirname(docsPath), { recursive: true });
+fs.writeFileSync(docsPath, minified, "utf8");
+console.log(`Built ${path.relative(root, minPath)} and ${path.relative(root, docsPath)}`);

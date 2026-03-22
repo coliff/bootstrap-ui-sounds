@@ -1,6 +1,10 @@
-/**
- * Bootstrap UI Sounds - Web Audio API sound feedback for Bootstrap components.
- * Sounds are off by default; enable via data-ui-sounds on <html>, <body>, or a component.
+/*!
+ * Bootstrap UI Sounds
+ * Copyright 2026 C.Oliff
+ * Licensed under MIT (https://github.com/coliff/bootstrap-ui-sounds)
+ *
+ * Web Audio API sound feedback for Bootstrap components. Sounds are off by default;
+ * enable via data-ui-sounds on <html>, <body>, or a component.
  */
 (function () {
   'use strict';
@@ -53,10 +57,13 @@
     change: { freq: 550, duration: 0.045, type: 'sine', volume: 0.22 },
     toast: { freq: 580, duration: 0.06, type: 'sine', volume: 0.24 },
     detail: { freq: 500, duration: 0.055, type: 'sine', volume: 0.26 },
+    carouselPrev: { freq: 500, duration: 0.055, type: 'sine', volume: 0.24 },
+    carouselNext: { freq: 660, duration: 0.055, type: 'sine', volume: 0.24 },
     closeButton: { freq: 380, duration: 0.05, type: 'sine', volume: 0.24 },
     switchOn: { freq: 780, duration: 0.05, type: 'square', volume: 0.25 },
     switchOff: { freq: 420, duration: 0.055, type: 'triangle', volume: 0.23 },
-    checkbox: { freq: 620, duration: 0.045, type: 'square', volume: 0.24 },
+    checkboxOn: { freq: 650, duration: 0.05, type: 'square', volume: 0.24 },
+    checkboxOff: { freq: 400, duration: 0.06, type: 'triangle', volume: 0.22 },
     radio: { freq: 680, duration: 0.045, type: 'triangle', volume: 0.23 },
     range: { freq: 500, duration: 0.04, type: 'sine', volume: 0.22 },
     formInvalid: { freq: 240, duration: 0.12, type: 'sawtooth', volume: 0.22 },
@@ -82,7 +89,9 @@
       gain.gain.exponentialRampToValueAtTime(0.001, now + preset.duration);
       osc.start(now);
       osc.stop(now + preset.duration);
-    } catch (_) {}
+    } catch (_) {
+      /* Web Audio may be unavailable */
+    }
   }
 
   // Close / dismiss (btn-close and data-bs-dismiss often lack .btn, so handle first)
@@ -102,6 +111,15 @@
     if (btn.closest('.carousel') && (btn.matches('[data-bs-slide]') || btn.closest('[data-bs-slide]'))) return;
     if (btn.classList.contains('btn-close') || btn.matches('[data-bs-dismiss]')) return;
     playSound('click', btn);
+  }, true);
+
+  // Carousel prev / next (controls are usually not .btn, so handle explicitly)
+  document.addEventListener('click', function (e) {
+    const ctrl = e.target && e.target.closest ? e.target.closest('.carousel [data-bs-slide]') : null;
+    if (!ctrl) return;
+    const dir = ctrl.getAttribute('data-bs-slide');
+    if (dir === 'prev') playSound('carouselPrev', ctrl);
+    else if (dir === 'next') playSound('carouselNext', ctrl);
   }, true);
 
   // Carousel indicators
@@ -137,7 +155,10 @@
     if (el.matches('input[type="range"]')) return;
     if (el.matches('input[type="checkbox"]')) {
       const isSwitch = el.matches('[role="switch"]') || (el.closest && el.closest('.form-switch'));
-      playSound(isSwitch ? (el.checked ? 'switchOn' : 'switchOff') : 'checkbox', el);
+      playSound(
+        isSwitch ? (el.checked ? 'switchOn' : 'switchOff') : el.checked ? 'checkboxOn' : 'checkboxOff',
+        el
+      );
       return;
     }
     if (el.matches('input[type="radio"]')) {
