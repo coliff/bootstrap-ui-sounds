@@ -1,6 +1,10 @@
-/**
- * Bootstrap UI Sounds - Web Audio API sound feedback for Bootstrap components.
- * Sounds are off by default; enable via data-ui-sounds on <html>, <body>, or a component.
+/*!
+ * Bootstrap UI Sounds
+ * Copyright 2026 C.Oliff
+ * Licensed under MIT (https://github.com/coliff/bootstrap-ui-sounds)
+ *
+ * Web Audio API sound feedback for Bootstrap components. Sounds are off by default;
+ * enable via data-ui-sounds on <html>, <body>, or a component.
  */
 (function () {
   'use strict';
@@ -85,7 +89,9 @@
       gain.gain.exponentialRampToValueAtTime(0.001, now + preset.duration);
       osc.start(now);
       osc.stop(now + preset.duration);
-    } catch (_) {}
+    } catch (_) {
+      /* Web Audio may be unavailable */
+    }
   }
 
   // Close / dismiss (btn-close and data-bs-dismiss often lack .btn, so handle first)

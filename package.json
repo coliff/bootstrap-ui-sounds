@@ -20,7 +20,7 @@
     "build": "node build.mjs",
     "lint": "npm run lint-html && npm run lint-js",
     "lint-html": "npx htmlhint **/*.html",
-    "lint-js": "npx eslint@8 *.{js,mjs} --fix",
+    "lint-js": "npx eslint@8 build.mjs js/bootstrap-ui-sounds.js --fix",
     "pa11y": "npx pa11y https://coliff.github.io/bootstrap-ui-sounds/",
     "prettier": "npx prettier --write \"*.{html,js,json,mjs,yml}\"",
     "serve": "npx serve docs",
