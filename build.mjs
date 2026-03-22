@@ -25,7 +25,7 @@ const docsPath = path.join(root, "docs", "bootstrap-ui-sounds.min.js");
 let code = fs.readFileSync(srcPath, "utf8");
 code = code.replace(
   /^(\s*\*\s*Bootstrap UI Sounds)(?:\s+v[\d.]+)?(\s*)$/m,
-  `$1 v${version}$2`
+  `$1 v${version}$2`,
 );
 fs.writeFileSync(srcPath, code, "utf8");
 const result = await minify(code, {
@@ -41,5 +41,5 @@ fs.writeFileSync(minPath, minified, "utf8");
 fs.mkdirSync(path.dirname(docsPath), { recursive: true });
 fs.writeFileSync(docsPath, minified, "utf8");
 console.log(
-  `Updated ${path.relative(root, srcPath)}; built ${path.relative(root, minPath)} and ${path.relative(root, docsPath)}`
+  `Updated ${path.relative(root, srcPath)}; built ${path.relative(root, minPath)} and ${path.relative(root, docsPath)}`,
 );

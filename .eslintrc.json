@@ -19,7 +19,11 @@
     "no-unneeded-ternary": "error",
     "no-unused-expressions": [
       "error",
-      { "allowShortCircuit": true, "allowTernary": true, "allowTaggedTemplates": true }
+      {
+        "allowShortCircuit": true,
+        "allowTernary": true,
+        "allowTaggedTemplates": true
+      }
     ],
     "no-useless-concat": "error",
     "no-unused-vars": [
