@@ -36,7 +36,7 @@
   "author": "Christian Oliff (https://christianoliff.com)",
   "scripts": {
     "build": "node build.mjs",
-    "lint": "npm run lint-html && npm run lint-js",
+    "lint": "npm run lint-html && npm run lint-js && npm run prettier && npm run spellcheck",
     "lint-html": "npx htmlhint **/*.html",
     "lint-js": "npx eslint@8 build.mjs js/bootstrap-ui-sounds.js --fix",
     "pa11y": "npx pa11y https://coliff.github.io/bootstrap-ui-sounds/",

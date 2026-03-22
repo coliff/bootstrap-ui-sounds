@@ -1,5 +1,5 @@
 /*!
- * Bootstrap UI Sounds
+ * Bootstrap UI Sounds v0.0.1
  * Copyright 2026 C.Oliff
  * Licensed under MIT (https://github.com/coliff/bootstrap-ui-sounds)
  *

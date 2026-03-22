@@ -1,15 +1,68 @@
 {
   "root": true,
-  "env": {
-    "node": true
-  },
   "extends": "eslint:recommended",
   "parserOptions": {
-    "ecmaVersion": "latest",
-    "sourceType": "module"
+    "ecmaVersion": "latest"
   },
   "ignorePatterns": ["**/*.min.*"],
   "rules": {
-    "no-undef": "off"
-  }
+    "dot-notation": "error",
+    "eqeqeq": ["error", "always", { "null": "ignore" }],
+    "no-duplicate-imports": "error",
+    "no-eval": "error",
+    "no-implied-eval": "error",
+    "no-new-func": "error",
+    "no-new-wrappers": "error",
+    "no-script-url": "error",
+    "no-sequences": "error",
+    "no-throw-literal": "error",
+    "no-unneeded-ternary": "error",
+    "no-unused-expressions": [
+      "error",
+      {
+        "allowShortCircuit": true,
+        "allowTernary": true,
+        "allowTaggedTemplates": true
+      }
+    ],
+    "no-useless-concat": "error",
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "no-var": "error",
+    "object-shorthand": "error",
+    "prefer-const": "error",
+    "prefer-template": "error"
+  },
+  "overrides": [
+    {
+      "files": ["build.mjs"],
+      "env": { "node": true, "es2022": true },
+      "parserOptions": { "sourceType": "module" },
+      "rules": {
+        "no-console": "off"
+      }
+    },
+    {
+      "files": ["js/**/*.js"],
+      "env": { "browser": true, "es2022": true },
+      "parserOptions": { "sourceType": "script" },
+      "rules": {
+        "no-alert": "error",
+        "no-console": "off",
+        "no-restricted-globals": [
+          "error",
+          {
+            "name": "event",
+            "message": "Use the event parameter (e.g. function (e) { ... e.target }) instead of the implicit global."
+          }
+        ]
+      }
+    }
+  ]
 }

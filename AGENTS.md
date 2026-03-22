@@ -2,8 +2,14 @@
 
 <!-- https://agents.md -->
 
-- This is a project to create UI sounds for Bootstrap.
+- This is a project to add UI sounds to Bootstrap.
 - Every Bootstrap component which can be interacted with should have a sound.
+
+## JavaScript
+
+- Use modern JavaScript features and syntax.
+- Format with Prettier.
+- Lint with ESLint 8.57.1.
 
 ## Pull Requests
 
