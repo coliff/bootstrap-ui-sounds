@@ -8,6 +8,8 @@
 
 UI Sounds for Bootstrap.
 
+**[Live demo](https://coliff.github.io/bootstrap-ui-sounds/)**
+
 ## License
 
 [MIT](LICENSE)

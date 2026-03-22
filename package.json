@@ -19,10 +19,16 @@
     "type": "git",
     "url": "git+https://github.com/coliff/bootstrap-ui-sounds.git"
   },
-  "funding": {
-    "type": "PayPal",
-    "url": "https://paypal.me/coliff"
-  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/coliff"
+    },
+    {
+      "type": "PayPal",
+      "url": "https://paypal.me/coliff"
+    }
+  ],
   "license": "MIT",
   "files": [
     "js"
@@ -35,7 +41,7 @@
     "lint-js": "npx eslint@8 build.mjs js/bootstrap-ui-sounds.js --fix",
     "pa11y": "npx pa11y https://coliff.github.io/bootstrap-ui-sounds/",
     "prettier": "npx prettier --write \"*.{html,js,json,mjs,yml}\"",
-    "serve": "npx serve docs",
+    "serve": "npm run build && npx serve docs",
     "spellcheck": "npx cspell \"*.{html,js,json,md,mjs,yml}\" --no-progress"
   },
   "devDependencies": {
