@@ -13,11 +13,11 @@
 
   /** Parse data-ui-sounds-volume (0–100) on a single node; null if unset/invalid. */
   function parseVolumeAttribute(node) {
-    if (!node || !node.getAttribute) return null;
+    if (!node || !node.getAttribute) {return null;}
     const raw = node.getAttribute('data-ui-sounds-volume');
-    if (raw === null || raw === '') return null;
+    if (raw === null || raw === '') {return null;}
     const num = Number(raw);
-    if (isNaN(num)) return null;
+    if (isNaN(num)) {return null;}
     return Math.max(0, Math.min(100, num)) / 100;
   }
 
@@ -29,7 +29,7 @@
     let node = element;
     while (node && node.nodeType === 1) {
       const v = parseVolumeAttribute(node);
-      if (v !== null) return v;
+      if (v !== null) {return v;}
       node = node.parentElement;
     }
     return 1.0;
@@ -43,7 +43,7 @@
   }
 
   function isSoundsEnabled(element) {
-    if (!element || !element.getAttribute) return false;
+    if (!element || !element.getAttribute) {return false;}
     const el = element.closest ? element.closest('[data-ui-sounds]') : null;
     if (el) {
       const v = el.getAttribute('data-ui-sounds');
@@ -83,13 +83,17 @@
   };
 
   function playSound(type, element) {
-    if (!isSoundsEnabled(element)) return;
+    if (!isSoundsEnabled(element)) {return;}
     const effectiveVolume = getEffectiveVolume(element);
-    if (effectiveVolume <= 0) return;
+    if (effectiveVolume <= 0) {return;}
     const preset = soundPresets[type] || soundPresets.click;
     try {
       const ctx = getAudioContext();
-      if (ctx.state === 'suspended') ctx.resume();
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(function () {
+          /* Ignore resume failures to avoid unhandled rejections */
+        });
+      }
       const now = ctx.currentTime;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -119,26 +123,26 @@
   // Buttons (exclude dropdown toggles and carousel controls to avoid double sounds)
   document.addEventListener('click', function (e) {
     const btn = e.target && e.target.closest ? e.target.closest('button.btn, input[type="submit"].btn, input[type="button"].btn, a.btn') : null;
-    if (!btn) return;
-    if (btn.matches('[data-bs-toggle="dropdown"]') || btn.closest('[data-bs-toggle="dropdown"]')) return;
-    if (btn.closest('.carousel') && (btn.matches('[data-bs-slide]') || btn.closest('[data-bs-slide]'))) return;
-    if (btn.classList.contains('btn-close') || btn.matches('[data-bs-dismiss]')) return;
+    if (!btn) {return;}
+    if (btn.matches('[data-bs-toggle="dropdown"]') || btn.closest('[data-bs-toggle="dropdown"]')) {return;}
+    if (btn.closest('.carousel') && (btn.matches('[data-bs-slide]') || btn.closest('[data-bs-slide]'))) {return;}
+    if (btn.classList.contains('btn-close') || btn.matches('[data-bs-dismiss]')) {return;}
     playSound('click', btn);
   }, true);
 
   // Carousel prev / next (controls are usually not .btn, so handle explicitly)
   document.addEventListener('click', function (e) {
     const ctrl = e.target && e.target.closest ? e.target.closest('.carousel [data-bs-slide]') : null;
-    if (!ctrl) return;
+    if (!ctrl) {return;}
     const dir = ctrl.getAttribute('data-bs-slide');
-    if (dir === 'prev') playSound('carouselPrev', ctrl);
-    else if (dir === 'next') playSound('carouselNext', ctrl);
+    if (dir === 'prev') {playSound('carouselPrev', ctrl);}
+    else if (dir === 'next') {playSound('carouselNext', ctrl);}
   }, true);
 
   // Carousel indicators
   document.addEventListener('click', function (e) {
     const ind = e.target && e.target.closest ? e.target.closest('.carousel-indicators [data-bs-slide-to]') : null;
-    if (ind) playSound('click', ind);
+    if (ind) {playSound('click', ind);}
   }, true);
 
   // Collapse – show/hide
@@ -160,12 +164,12 @@
   // Form inputs – focus
   document.addEventListener('focusin', function (e) {
     const el = e.target;
-    if (el.matches('input:not([type="hidden"]), textarea, select')) playSound('focus', el);
+    if (el.matches('input:not([type="hidden"]), textarea, select')) {playSound('focus', el);}
   });
   document.addEventListener('change', function (e) {
     const el = e.target;
-    if (!el.matches('input, textarea, select')) return;
-    if (el.matches('input[type="range"]')) return;
+    if (!el.matches('input, textarea, select')) {return;}
+    if (el.matches('input[type="range"]')) {return;}
     if (el.matches('input[type="checkbox"]')) {
       const isSwitch = el.matches('[role="switch"]') || (el.closest && el.closest('.form-switch'));
       playSound(
@@ -182,7 +186,7 @@
   });
   document.addEventListener('input', function (e) {
     const el = e.target;
-    if (el.matches && el.matches('input[type="range"]')) playSound('range', el);
+    if (el.matches && el.matches('input[type="range"]')) {playSound('range', el);}
   });
 
   // Modals
@@ -219,18 +223,18 @@
 
   // Details / Summary (capture so we run before any other handler; use document for enabled check)
   document.addEventListener('toggle', function (e) {
-    if (!e.target || e.target.tagName.toUpperCase() !== 'DETAILS') return;
+    if (!e.target || e.target.tagName.toUpperCase() !== 'DETAILS') {return;}
     const soundType = e.target.open ? 'expand' : 'collapse';
     playSound(soundType, document.body);
   }, true);
 
   // Form validation
   document.addEventListener('invalid', function (e) {
-    if (e.target && e.target.matches('input, select, textarea')) playSound('formInvalid', e.target);
+    if (e.target && e.target.matches('input, select, textarea')) {playSound('formInvalid', e.target);}
   }, true);
   document.addEventListener('submit', function (e) {
     const form = e.target;
-    if (form && form.checkValidity && form.checkValidity()) playSound('formValid', form);
+    if (form && form.checkValidity && form.checkValidity()) {playSound('formValid', form);}
   }, true);
 
   // Alerts – when appearing (new alert added to DOM)
@@ -239,9 +243,9 @@
       const nodes = mutations[i].addedNodes;
       for (let j = 0; j < nodes.length; j++) {
         const node = nodes[j];
-        if (node.nodeType !== 1) continue;
+        if (node.nodeType !== 1) {continue;}
         const alertEl = node.classList && node.classList.contains('alert') ? node : (node.querySelector && node.querySelector('.alert'));
-        if (alertEl) playSound('alert', alertEl);
+        if (alertEl) {playSound('alert', alertEl);}
       }
     }
   });
