@@ -89,7 +89,11 @@
     const preset = soundPresets[type] || soundPresets.click;
     try {
       const ctx = getAudioContext();
-      if (ctx.state === 'suspended') {ctx.resume();}
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(function () {
+          /* Ignore resume failures to avoid unhandled rejections */
+        });
+      }
       const now = ctx.currentTime;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
