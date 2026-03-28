@@ -42,7 +42,7 @@
     "pa11y": "npx pa11y https://coliff.github.io/bootstrap-ui-sounds/",
     "prettier": "npx prettier --write \"*.{html,js,json,mjs,yml}\"",
     "serve": "npm run build && npx serve docs",
-    "spellcheck": "npx cspell \"*.{html,js,json,md,mjs,yml}\" --no-progress"
+    "spellcheck": "npx cspell \"*.{html,js,json,md,mjs,txt,yml}\" --no-progress"
   },
   "devDependencies": {
     "terser": "5.46.1"

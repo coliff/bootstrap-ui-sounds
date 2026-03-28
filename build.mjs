@@ -34,7 +34,9 @@ const result = await minify(code, {
   format: { comments: false },
 });
 
-if (result.error) throw result.error;
+if (result.error) {
+  throw result.error;
+}
 const minified = banner + result.code;
 fs.mkdirSync(path.dirname(minPath), { recursive: true });
 fs.writeFileSync(minPath, minified, "utf8");
