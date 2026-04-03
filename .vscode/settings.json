@@ -1,4 +1,8 @@
 {
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+  },
   "editor.renderWhitespace": "all",
+  "eslint.validate": ["javascript"],
   "html.format.indentInnerHtml": true
 }
