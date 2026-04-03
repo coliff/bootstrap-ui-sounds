@@ -46,7 +46,7 @@
   <meta name="fediverse:creator" content="@christianoliff@mastodon.social" />
   <meta name="description" content="Test page for Bootstrap UI Sounds" />
 
-  <script src="bootstrap-ui-sounds.min.js" defer></script>
+  <script src="../js/bootstrap-ui-sounds.js" defer></script>
 </head>
 
 <body>
@@ -353,7 +353,6 @@
       if (rangeInput && rangeValue) {
         rangeInput.addEventListener("input", function () {
           rangeValue.textContent = rangeInput.value;
-          rangeInput.setAttribute("data-ui-sounds-volume", rangeInput.value);
         });
       }
       var validationForm = document.getElementById("validationForm");
