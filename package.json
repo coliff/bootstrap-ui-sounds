@@ -41,7 +41,7 @@
     "lint-js": "npx eslint@8 build.mjs js/bootstrap-ui-sounds.js --fix",
     "pa11y": "npx pa11y https://coliff.github.io/bootstrap-ui-sounds/",
     "prettier": "npx prettier --write \"*.{html,js,json,mjs,yml}\"",
-    "serve": "npm run lint-js && npm run build && npx serve . -l 3000 & sleep 2 && open http://localhost:3000/docs/",
+    "serve": "npm run lint-js && npm run build && npx serve . -l 3000",
     "spellcheck": "npx cspell \"*.{html,js,json,md,mjs,txt,yml}\" --no-progress"
   },
   "devDependencies": {
