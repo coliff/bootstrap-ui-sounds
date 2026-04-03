@@ -1,6 +1,6 @@
 {
   "name": "bootstrap-ui-sounds",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "UI Sounds for Bootstrap",
   "main": "js/bootstrap-ui-sounds.js",
   "unpkg": "js/bootstrap-ui-sounds.min.js",
@@ -35,13 +35,13 @@
   ],
   "author": "Christian Oliff (https://christianoliff.com)",
   "scripts": {
-    "build": "node build.mjs",
-    "lint": "npm run lint-html && npm run lint-js && npm run prettier && npm run spellcheck",
+    "build": "npm run lint-js && node build.mjs",
+    "lint": "npm run lint-html && npm run lint-js && npm run prettier && npm run spellcheck && node build.mjs",
     "lint-html": "npx htmlhint **/*.html",
     "lint-js": "npx eslint@8 build.mjs js/bootstrap-ui-sounds.js --fix",
     "pa11y": "npx pa11y https://coliff.github.io/bootstrap-ui-sounds/",
     "prettier": "npx prettier --write \"*.{html,js,json,mjs,yml}\"",
-    "serve": "npm run build && npx serve docs",
+    "serve": "npm run lint-js && npm run build && npx serve . -l 3000 & sleep 2 && open http://localhost:3000/docs/",
     "spellcheck": "npx cspell \"*.{html,js,json,md,mjs,txt,yml}\" --no-progress"
   },
   "devDependencies": {

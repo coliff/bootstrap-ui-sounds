@@ -13,5 +13,5 @@
 
 ## Pull Requests
 
-- When making a pull request, ensure all checks pass and all tests are passing.
+- When making a pull request, ensure all checks and all tests are passing.
 - Pull request descriptions should be a list of bullet points of the changes made.

@@ -353,7 +353,6 @@
       if (rangeInput && rangeValue) {
         rangeInput.addEventListener("input", function () {
           rangeValue.textContent = rangeInput.value;
-          rangeInput.setAttribute("data-ui-sounds-volume", rangeInput.value);
         });
       }
       var validationForm = document.getElementById("validationForm");

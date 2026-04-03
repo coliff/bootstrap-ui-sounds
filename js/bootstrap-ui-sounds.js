@@ -11,30 +11,6 @@
 
   let audioContext = null;
 
-  /** Parse data-ui-sounds-volume (0–100) on a single node; null if unset/invalid. */
-  function parseVolumeAttribute(node) {
-    if (!node || !node.getAttribute) {return null;}
-    const raw = node.getAttribute('data-ui-sounds-volume');
-    if (raw === null || raw === '') {return null;}
-    const num = Number(raw);
-    if (isNaN(num)) {return null;}
-    return Math.max(0, Math.min(100, num)) / 100;
-  }
-
-  /**
-   * Volume for a given interaction: first data-ui-sounds-volume on the element or an ancestor
-   * (closest wins). If none, full volume (1). Page-wide control: set the attribute on <html> or <body>.
-   */
-  function getEffectiveVolume(element) {
-    let node = element;
-    while (node && node.nodeType === 1) {
-      const v = parseVolumeAttribute(node);
-      if (v !== null) {return v;}
-      node = node.parentElement;
-    }
-    return 1.0;
-  }
-
   function getAudioContext() {
     if (!audioContext) {
       audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -84,8 +60,6 @@
 
   function playSound(type, element) {
     if (!isSoundsEnabled(element)) {return;}
-    const effectiveVolume = getEffectiveVolume(element);
-    if (effectiveVolume <= 0) {return;}
     const preset = soundPresets[type] || soundPresets.click;
     try {
       const ctx = getAudioContext();
@@ -102,13 +76,34 @@
       osc.type = preset.type;
       osc.frequency.setValueAtTime(preset.freq, now);
       gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(preset.volume * effectiveVolume, now + 0.008);
+      gain.gain.linearRampToValueAtTime(preset.volume, now + 0.008);
       gain.gain.exponentialRampToValueAtTime(0.001, now + preset.duration);
       osc.start(now);
       osc.stop(now + preset.duration);
     } catch (_) {
       /* Web Audio may be unavailable */
     }
+  }
+
+  function getTriggerFromTarget(target, selector) {
+    if (!target || !target.id) {return null;}
+    const escapedId = window.CSS && window.CSS.escape ? window.CSS.escape(target.id) : target.id.replace(/"/g, '\\"');
+    const doc = target.ownerDocument || document;
+    return doc.querySelector(
+      `${selector  }[data-bs-target="#${  escapedId  }"], ${ 
+      selector  }[href="#${  escapedId  }"]`
+    );
+  }
+
+  function getInteractionElement(event, fallbackElement) {
+    if (event && event.relatedTarget && event.relatedTarget.nodeType === 1) {
+      return event.relatedTarget;
+    }
+    if (event && event.clickEvent && event.clickEvent.target && event.clickEvent.target.closest) {
+      const trigger = event.clickEvent.target.closest('[data-bs-toggle], [data-bs-dismiss], .btn-close, button, a, input, summary');
+      if (trigger) {return trigger;}
+    }
+    return fallbackElement;
   }
 
   // Close / dismiss (btn-close and data-bs-dismiss often lack .btn, so handle first)
@@ -147,18 +142,18 @@
 
   // Collapse – show/hide
   document.addEventListener('show.bs.collapse', function (e) {
-    playSound('expand', e.target);
+    playSound('expand', getTriggerFromTarget(e.target, '[data-bs-toggle="collapse"]') || e.target);
   });
   document.addEventListener('hide.bs.collapse', function (e) {
-    playSound('collapse', e.target);
+    playSound('collapse', getTriggerFromTarget(e.target, '[data-bs-toggle="collapse"]') || e.target);
   });
 
   // Dropdown
   document.addEventListener('show.bs.dropdown', function (e) {
-    playSound('open', e.target);
+    playSound('open', getInteractionElement(e, e.target));
   });
   document.addEventListener('hide.bs.dropdown', function (e) {
-    playSound('close', e.target);
+    playSound('close', getInteractionElement(e, e.target));
   });
 
   // Form inputs – focus
@@ -191,18 +186,18 @@
 
   // Modals
   document.addEventListener('show.bs.modal', function (e) {
-    playSound('open', e.target);
+    playSound('open', getInteractionElement(e, e.target));
   });
   document.addEventListener('hide.bs.modal', function (e) {
-    playSound('close', e.target);
+    playSound('close', getInteractionElement(e, e.target));
   });
 
   // Popovers
   document.addEventListener('show.bs.popover', function (e) {
-    playSound('open', e.target);
+    playSound('open', getInteractionElement(e, e.target));
   });
   document.addEventListener('hide.bs.popover', function (e) {
-    playSound('close', e.target);
+    playSound('close', getInteractionElement(e, e.target));
   });
 
   // Toast
@@ -215,17 +210,17 @@
 
   // Tooltips
   document.addEventListener('show.bs.tooltip', function (e) {
-    playSound('open', e.target);
+    playSound('open', getInteractionElement(e, e.target));
   });
   document.addEventListener('hide.bs.tooltip', function (e) {
-    playSound('close', e.target);
+    playSound('close', getInteractionElement(e, e.target));
   });
 
   // Details / Summary (capture so we run before any other handler; use document for enabled check)
   document.addEventListener('toggle', function (e) {
     if (!e.target || e.target.tagName.toUpperCase() !== 'DETAILS') {return;}
     const soundType = e.target.open ? 'expand' : 'collapse';
-    playSound(soundType, document.body);
+    playSound(soundType, e.target);
   }, true);
 
   // Form validation
