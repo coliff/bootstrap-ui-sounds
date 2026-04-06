@@ -64,12 +64,15 @@
     }
     const preset = soundPresets[type] || soundPresets.click;
     const volume =
-      options && typeof options.volume === "number"
+      options && typeof options.volume === 'number'
         ? options.volume
         : preset.volume;
+    if (volume <= 0) {
+      return;
+    }
     try {
       const ctx = getAudioContext();
-      if (ctx.state === "suspended") {
+      if (ctx.state === 'suspended') {
         ctx.resume().catch(function () {
           /* Ignore resume failures to avoid unhandled rejections */
         });
