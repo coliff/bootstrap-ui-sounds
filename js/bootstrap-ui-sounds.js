@@ -1,5 +1,5 @@
 /*!
- * Bootstrap UI Sounds v0.0.1
+ * Bootstrap UI Sounds v0.0.2
  * Copyright 2026 C.Oliff
  * Licensed under MIT (https://github.com/coliff/bootstrap-ui-sounds)
  *
@@ -54,13 +54,22 @@
     checkboxOff: { freq: 400, duration: 0.06, type: 'triangle', volume: 0.22 },
     radio: { freq: 680, duration: 0.045, type: 'triangle', volume: 0.23 },
     range: { freq: 500, duration: 0.04, type: 'sine', volume: 0.22 },
-    formInvalid: { freq: 240, duration: 0.12, type: 'sawtooth', volume: 0.22 },
+    formInvalid: { freq: 280, duration: 0.1, type: 'triangle', volume: 0.2 },
     formValid: { freq: 520, duration: 0.1, type: 'triangle', volume: 0.22 }
   };
 
-  function playSound(type, element) {
-    if (!isSoundsEnabled(element)) {return;}
+  function playSound(type, element, options) {
+    if (!isSoundsEnabled(element)) {
+      return;
+    }
     const preset = soundPresets[type] || soundPresets.click;
+    const volume =
+      options && typeof options.volume === 'number'
+        ? options.volume
+        : preset.volume;
+    if (volume <= 0) {
+      return;
+    }
     try {
       const ctx = getAudioContext();
       if (ctx.state === 'suspended') {
@@ -76,7 +85,7 @@
       osc.type = preset.type;
       osc.frequency.setValueAtTime(preset.freq, now);
       gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(preset.volume, now + 0.008);
+      gain.gain.linearRampToValueAtTime(volume, now + 0.008);
       gain.gain.exponentialRampToValueAtTime(0.001, now + preset.duration);
       osc.start(now);
       osc.stop(now + preset.duration);
@@ -90,8 +99,9 @@
     const escapedId = window.CSS && window.CSS.escape ? window.CSS.escape(target.id) : target.id.replace(/"/g, '\\"');
     const doc = target.ownerDocument || document;
     return doc.querySelector(
-      `${selector  }[data-bs-target="#${  escapedId  }"], ${ 
-      selector  }[href="#${  escapedId  }"]`
+      `${selector}[data-bs-target="#${escapedId}"], ${
+        selector
+      }[href="#${escapedId}"]`,
     );
   }
 
@@ -104,6 +114,24 @@
       if (trigger) {return trigger;}
     }
     return fallbackElement;
+  }
+
+  function getRangeVolume(element) {
+    const min = Number(element.min || 0);
+    const max = Number(element.max || 100);
+    const value = Number(element.value);
+
+    if (
+      !Number.isFinite(min) ||
+      !Number.isFinite(max) ||
+      !Number.isFinite(value) ||
+      max <= min
+    ) {
+      return soundPresets.range.volume;
+    }
+
+    const progress = Math.min(Math.max((value - min) / (max - min), 0), 1);
+    return soundPresets.range.volume * progress;
   }
 
   // Close / dismiss (btn-close and data-bs-dismiss often lack .btn, so handle first)
@@ -181,7 +209,9 @@
   });
   document.addEventListener('input', function (e) {
     const el = e.target;
-    if (el.matches && el.matches('input[type="range"]')) {playSound('range', el);}
+    if (el.matches && el.matches('input[type="range"]')) {
+      playSound("range", el, { volume: getRangeVolume(el) });
+    }
   });
 
   // Modals
