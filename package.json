@@ -1,6 +1,6 @@
 {
   "name": "bootstrap-ui-sounds",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "UI Sounds for Bootstrap",
   "main": "js/bootstrap-ui-sounds.js",
   "unpkg": "js/bootstrap-ui-sounds.min.js",
@@ -11,7 +11,7 @@
     "audio-feedback",
     "bootstrap-5"
   ],
-  "homepage": "https://coliff.github.io/bootstrap-ui-sounds/",
+  "homepage": "https://coliff.github.io/bootstrap-ui-sounds/docs/",
   "bugs": {
     "url": "https://github.com/coliff/bootstrap-ui-sounds/issues"
   },

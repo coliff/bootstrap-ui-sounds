@@ -1,5 +1,5 @@
 /*!
- * Bootstrap UI Sounds v0.0.2
+ * Bootstrap UI Sounds v0.0.3
  * Copyright 2026 C.Oliff
  * Licensed under MIT (https://github.com/coliff/bootstrap-ui-sounds)
  *
@@ -30,8 +30,14 @@
     const body = doc.body;
     const onHtml = html && html.getAttribute('data-ui-sounds');
     const onBody = body && body.getAttribute('data-ui-sounds');
-    const v = onHtml || onBody;
-    return v === '' || v === 'true' || v === '1';
+    return (
+      onHtml === '' ||
+      onHtml === 'true' ||
+      onHtml === '1' ||
+      onBody === '' ||
+      onBody === 'true' ||
+      onBody === '1'
+    );
   }
 
   const soundPresets = {
@@ -134,6 +140,15 @@
     return soundPresets.range.volume * progress;
   }
 
+  function hasSemanticBootstrapSoundTrigger(element) {
+    return Boolean(
+      element && element.matches &&
+      element.matches(
+        '[data-bs-toggle="collapse"], [data-bs-toggle="modal"], [data-bs-toggle="popover"], [data-bs-toggle="tooltip"]'
+      )
+    );
+  }
+
   // Close / dismiss (btn-close and data-bs-dismiss often lack .btn, so handle first)
   document.addEventListener('click', function (e) {
     const closeEl = e.target && e.target.closest ? e.target.closest('.btn-close, [data-bs-dismiss]') : null;
@@ -150,6 +165,7 @@
     if (btn.matches('[data-bs-toggle="dropdown"]') || btn.closest('[data-bs-toggle="dropdown"]')) {return;}
     if (btn.closest('.carousel') && (btn.matches('[data-bs-slide]') || btn.closest('[data-bs-slide]'))) {return;}
     if (btn.classList.contains('btn-close') || btn.matches('[data-bs-dismiss]')) {return;}
+    if (hasSemanticBootstrapSoundTrigger(btn)) {return;}
     playSound('click', btn);
   }, true);
 
