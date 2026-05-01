@@ -45,7 +45,7 @@
     "spellcheck": "npx cspell \"*.{html,js,json,md,mjs,txt,yml}\" --no-progress"
   },
   "devDependencies": {
-    "terser": "5.46.1"
+    "terser": "5.46.2"
   },
   "volta": {
     "node": "24.14.0"
