@@ -240,11 +240,54 @@
     </section>
 
     <section class="mb-5">
+      <h2 class="h5 mb-3">Offcanvas</h2>
+      <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#demoOffcanvas"
+        aria-controls="demoOffcanvas">
+        Open offcanvas
+      </button>
+      <div class="offcanvas offcanvas-start" tabindex="-1" id="demoOffcanvas" aria-labelledby="demoOffcanvasLabel">
+        <div class="offcanvas-header">
+          <h3 class="offcanvas-title fs-5" id="demoOffcanvasLabel">Offcanvas</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          Opening and closing this offcanvas plays a sound.
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-5">
       <h2 class="h5 mb-3">Popover</h2>
       <button type="button" class="btn btn-primary" data-bs-toggle="popover" data-bs-title="Popover"
         data-bs-content="Opening and closing plays a sound.">
         Toggle popover
       </button>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="h5 mb-3">Tabs</h2>
+      <ul class="nav nav-tabs" id="demoTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="tab1-tab" data-bs-toggle="tab" data-bs-target="#tab1-pane" type="button"
+            role="tab" aria-controls="tab1-pane" aria-selected="true">
+            First
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab2-tab" data-bs-toggle="tab" data-bs-target="#tab2-pane" type="button"
+            role="tab" aria-controls="tab2-pane" aria-selected="false">
+            Second
+          </button>
+        </li>
+      </ul>
+      <div class="tab-content border border-top-0 rounded-bottom p-3">
+        <div class="tab-pane fade show active" id="tab1-pane" role="tabpanel" aria-labelledby="tab1-tab" tabindex="0">
+          First tab content. Switching tabs plays a sound.
+        </div>
+        <div class="tab-pane fade" id="tab2-pane" role="tabpanel" aria-labelledby="tab2-tab" tabindex="0">
+          Second tab content.
+        </div>
+      </div>
     </section>
 
     <section class="mb-5">

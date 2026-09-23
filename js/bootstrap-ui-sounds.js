@@ -51,6 +51,7 @@
     change: { freq: 550, duration: 0.045, type: 'sine', volume: 0.22 },
     toast: { freq: 580, duration: 0.06, type: 'sine', volume: 0.24 },
     detail: { freq: 500, duration: 0.055, type: 'sine', volume: 0.26 },
+    tab: { freq: 600, duration: 0.045, type: 'sine', volume: 0.24 },
     carouselPrev: { freq: 500, duration: 0.055, type: 'sine', volume: 0.24 },
     carouselNext: { freq: 660, duration: 0.055, type: 'sine', volume: 0.24 },
     closeButton: { freq: 380, duration: 0.05, type: 'sine', volume: 0.24 },
@@ -74,6 +75,11 @@
         ? options.volume
         : preset.volume;
     if (volume <= 0) {
+      return;
+    }
+    // Before any user gesture the AudioContext is suspended; scheduled sounds would
+    // queue up and all play at once on the first interaction, so skip them.
+    if (navigator.userActivation && !navigator.userActivation.hasBeenActive) {
       return;
     }
     try {
@@ -144,7 +150,7 @@
     return Boolean(
       element && element.matches &&
       element.matches(
-        '[data-bs-toggle="collapse"], [data-bs-toggle="modal"], [data-bs-toggle="popover"], [data-bs-toggle="tooltip"]'
+        '[data-bs-toggle="collapse"], [data-bs-toggle="modal"], [data-bs-toggle="offcanvas"], [data-bs-toggle="popover"], [data-bs-toggle="tooltip"], [data-bs-toggle="tab"], [data-bs-toggle="pill"], [data-bs-toggle="list"]'
       )
     );
   }
@@ -238,6 +244,19 @@
     playSound('close', getInteractionElement(e, e.target));
   });
 
+  // Offcanvas
+  document.addEventListener('show.bs.offcanvas', function (e) {
+    playSound('open', getInteractionElement(e, e.target));
+  });
+  document.addEventListener('hide.bs.offcanvas', function (e) {
+    playSound('close', getInteractionElement(e, e.target));
+  });
+
+  // Tabs / pills / list groups
+  document.addEventListener('show.bs.tab', function (e) {
+    playSound('tab', e.target);
+  });
+
   // Popovers
   document.addEventListener('show.bs.popover', function (e) {
     playSound('open', getInteractionElement(e, e.target));
@@ -269,13 +288,24 @@
     playSound(soundType, e.target);
   }, true);
 
-  // Form validation
+  // Form validation (one invalid sound per validation pass, not one per invalid field)
+  let invalidSoundPending = false;
   document.addEventListener('invalid', function (e) {
-    if (e.target && e.target.matches('input, select, textarea')) {playSound('formInvalid', e.target);}
+    if (invalidSoundPending || !e.target || !e.target.matches('input, select, textarea')) {return;}
+    invalidSoundPending = true;
+    setTimeout(function () {
+      invalidSoundPending = false;
+    }, 0);
+    playSound('formInvalid', e.target);
   }, true);
   document.addEventListener('submit', function (e) {
     const form = e.target;
-    if (form && form.checkValidity && form.checkValidity()) {playSound('formValid', form);}
+    if (!form || !form.elements) {return;}
+    // Check validity without form.checkValidity(), which would fire extra invalid events
+    const isValid = Array.prototype.every.call(form.elements, function (el) {
+      return !el.willValidate || !el.validity || el.validity.valid;
+    });
+    if (isValid) {playSound('formValid', form);}
   }, true);
 
   // Alerts – when appearing (new alert added to DOM)
