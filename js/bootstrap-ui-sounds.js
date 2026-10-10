@@ -1,9 +1,9 @@
 /*!
- * Bootstrap UI Sounds v0.0.3
+ * Bootstrap UI Sounds v0.1.0
  * Copyright 2026 C.Oliff
  * Licensed under MIT (https://github.com/coliff/bootstrap-ui-sounds)
  *
- * Web Audio API sound feedback for Bootstrap components. Sounds are off by default;
+ * Web Audio API sound feedback for Bootstrap 6 components. Sounds are off by default;
  * enable via data-ui-sounds on <html>, <body>, or a component.
  */
 (function () {
@@ -62,8 +62,25 @@
     radio: { freq: 680, duration: 0.045, type: 'triangle', volume: 0.23 },
     range: { freq: 500, duration: 0.04, type: 'sine', volume: 0.22 },
     formInvalid: { freq: 280, duration: 0.1, type: 'triangle', volume: 0.2 },
-    formValid: { freq: 520, duration: 0.1, type: 'triangle', volume: 0.22 }
+    formValid: { freq: 520, duration: 0.1, type: 'triangle', volume: 0.22 },
+    chipAdd: { freq: 720, duration: 0.045, type: 'triangle', volume: 0.22 },
+    chipRemove: { freq: 360, duration: 0.05, type: 'triangle', volume: 0.22 },
+    key: { freq: 900, duration: 0.025, type: 'sine', volume: 0.16 },
+    complete: { freq: 880, duration: 0.09, type: 'triangle', volume: 0.22 },
+    strengthWeak: { freq: 300, duration: 0.06, type: 'sine', volume: 0.18 },
+    strengthFair: { freq: 440, duration: 0.06, type: 'sine', volume: 0.18 },
+    strengthGood: { freq: 580, duration: 0.06, type: 'sine', volume: 0.18 },
+    strengthStrong: { freq: 760, duration: 0.06, type: 'sine', volume: 0.2 }
   };
+
+  // Bootstrap 6 buttons use variant classes (.btn-solid, .btn-outline, …) instead of .btn
+  const BUTTON_CLASSES = ['.btn', '.btn-solid', '.btn-outline', '.btn-subtle', '.btn-text', '.btn-styled', '.btn-link', '.btn-icon'];
+  const BUTTON_SELECTOR = BUTTON_CLASSES.flatMap((cls) => [
+    `button${cls}`,
+    `a${cls}`,
+    `input[type="submit"]${cls}`,
+    `input[type="button"]${cls}`
+  ]).join(', ');
 
   function playSound(type, element, options) {
     if (!isSoundsEnabled(element)) {
@@ -150,7 +167,7 @@
     return Boolean(
       element && element.matches &&
       element.matches(
-        '[data-bs-toggle="collapse"], [data-bs-toggle="modal"], [data-bs-toggle="offcanvas"], [data-bs-toggle="popover"], [data-bs-toggle="tooltip"], [data-bs-toggle="tab"], [data-bs-toggle="pill"], [data-bs-toggle="list"]'
+        '[data-bs-toggle="collapse"], [data-bs-toggle="dialog"], [data-bs-toggle="drawer"], [data-bs-toggle="menu"], [data-bs-toggle="popover"], [data-bs-toggle="tooltip"], [data-bs-toggle="tab"], [data-bs-toggle="combobox"], [data-bs-toggle="datepicker"], [data-bs-toggle="toggler"]'
       )
     );
   }
@@ -164,12 +181,11 @@
     }
   }, true);
 
-  // Buttons (exclude dropdown toggles and carousel controls to avoid double sounds)
+  // Buttons (exclude menu toggles and carousel controls to avoid double sounds)
   document.addEventListener('click', function (e) {
-    const btn = e.target && e.target.closest ? e.target.closest('button.btn, input[type="submit"].btn, input[type="button"].btn, a.btn') : null;
+    const btn = e.target && e.target.closest ? e.target.closest(BUTTON_SELECTOR) : null;
     if (!btn) {return;}
-    if (btn.matches('[data-bs-toggle="dropdown"]') || btn.closest('[data-bs-toggle="dropdown"]')) {return;}
-    if (btn.closest('.carousel') && (btn.matches('[data-bs-slide]') || btn.closest('[data-bs-slide]'))) {return;}
+    if (btn.closest('.carousel') && btn.matches('[data-bs-slide], [data-bs-slide-to], .carousel-control-play-pause')) {return;}
     if (btn.classList.contains('btn-close') || btn.matches('[data-bs-dismiss]')) {return;}
     if (hasSemanticBootstrapSoundTrigger(btn)) {return;}
     playSound('click', btn);
@@ -182,6 +198,12 @@
     const dir = ctrl.getAttribute('data-bs-slide');
     if (dir === 'prev') {playSound('carouselPrev', ctrl);}
     else if (dir === 'next') {playSound('carouselNext', ctrl);}
+  }, true);
+
+  // Carousel play / pause
+  document.addEventListener('click', function (e) {
+    const ctrl = e.target && e.target.closest ? e.target.closest('.carousel .carousel-control-play-pause') : null;
+    if (ctrl) {playSound('click', ctrl);}
   }, true);
 
   // Carousel indicators
@@ -198,25 +220,27 @@
     playSound('collapse', getTriggerFromTarget(e.target, '[data-bs-toggle="collapse"]') || e.target);
   });
 
-  // Dropdown
-  document.addEventListener('show.bs.dropdown', function (e) {
+  // Menu (replaces Dropdown in Bootstrap 6)
+  document.addEventListener('show.bs.menu', function (e) {
     playSound('open', getInteractionElement(e, e.target));
   });
-  document.addEventListener('hide.bs.dropdown', function (e) {
+  document.addEventListener('hide.bs.menu', function (e) {
     playSound('close', getInteractionElement(e, e.target));
   });
 
-  // Form inputs – focus
+  // Form inputs – focus (datepicker inputs open on focus, so they play the open sound instead)
   document.addEventListener('focusin', function (e) {
     const el = e.target;
-    if (el.matches('input:not([type="hidden"]), textarea, select')) {playSound('focus', el);}
+    if (!el.matches || !el.matches('input:not([type="hidden"]), textarea, select')) {return;}
+    if (el.matches('[data-bs-toggle="datepicker"]')) {return;}
+    playSound('focus', el);
   });
   document.addEventListener('change', function (e) {
     const el = e.target;
     if (!el.matches('input, textarea, select')) {return;}
     if (el.matches('input[type="range"]')) {return;}
     if (el.matches('input[type="checkbox"]')) {
-      const isSwitch = el.matches('[role="switch"]') || (el.closest && el.closest('.form-switch'));
+      const isSwitch = el.matches('[role="switch"], [switch]') || (el.closest && el.closest('.switch'));
       playSound(
         isSwitch ? (el.checked ? 'switchOn' : 'switchOff') : el.checked ? 'checkboxOn' : 'checkboxOff',
         el
@@ -236,23 +260,67 @@
     }
   });
 
-  // Modals
-  document.addEventListener('show.bs.modal', function (e) {
+  // Dialog (replaces Modal in Bootstrap 6)
+  document.addEventListener('show.bs.dialog', function (e) {
     playSound('open', getInteractionElement(e, e.target));
   });
-  document.addEventListener('hide.bs.modal', function (e) {
+  document.addEventListener('hide.bs.dialog', function (e) {
     playSound('close', getInteractionElement(e, e.target));
   });
 
-  // Offcanvas
-  document.addEventListener('show.bs.offcanvas', function (e) {
+  // Drawer (replaces Offcanvas in Bootstrap 6)
+  document.addEventListener('show.bs.drawer', function (e) {
     playSound('open', getInteractionElement(e, e.target));
   });
-  document.addEventListener('hide.bs.offcanvas', function (e) {
+  document.addEventListener('hide.bs.drawer', function (e) {
     playSound('close', getInteractionElement(e, e.target));
   });
 
-  // Tabs / pills / list groups
+  // Combobox (opening and closing are covered by the Menu events it fires)
+  document.addEventListener('change.bs.combobox', function (e) {
+    playSound('change', e.target);
+  });
+
+  // Datepicker
+  document.addEventListener('show.bs.datepicker', function (e) {
+    playSound('open', e.target);
+  });
+  document.addEventListener('hide.bs.datepicker', function (e) {
+    playSound('close', e.target);
+  });
+  document.addEventListener('change.bs.datepicker', function (e) {
+    playSound('detail', e.target);
+  });
+
+  // Chips
+  document.addEventListener('add.bs.chips', function (e) {
+    playSound('chipAdd', e.target);
+  });
+  document.addEventListener('remove.bs.chips', function (e) {
+    playSound('chipRemove', e.target);
+  });
+
+  // OTP input – a soft tick per character, then a chime when complete
+  document.addEventListener('input.bs.otpInput', function (e) {
+    playSound('key', e.target);
+  });
+  document.addEventListener('complete.bs.otpInput', function (e) {
+    playSound('complete', e.target);
+  });
+
+  // Password strength – pitch rises with strength
+  const strengthSounds = { weak: 'strengthWeak', fair: 'strengthFair', good: 'strengthGood', strong: 'strengthStrong' };
+  document.addEventListener('strengthChange.bs.strength', function (e) {
+    const soundType = strengthSounds[e.strength];
+    if (soundType) {playSound(soundType, e.target);}
+  });
+
+  // Toggler
+  document.addEventListener('toggled.bs.toggler', function (e) {
+    playSound('click', e.target);
+  });
+
+  // Tabs / list groups
   document.addEventListener('show.bs.tab', function (e) {
     playSound('tab', e.target);
   });

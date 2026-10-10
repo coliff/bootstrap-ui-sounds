@@ -15,3 +15,5 @@
 
 - When making a pull request, ensure all checks and all tests are passing.
 - Pull request descriptions should be a list of bullet points of the changes made.
+- Use meaningful branch names.
+- Squash commits to a single commit.
