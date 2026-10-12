@@ -15,9 +15,11 @@
     "Oliff",
     "ossf",
     "sarif",
+    "specialchars",
     "Svgs",
     "tagname",
     "twbs",
+    "WCAG",
     "ZIZMOR"
   ],
   "useGitignore": true
