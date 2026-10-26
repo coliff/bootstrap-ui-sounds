@@ -1,0 +1,40 @@
+{
+  "extends": "stylelint-config-standard",
+  "overrides": [
+    {
+      "files": ["**/*.html"],
+      "customSyntax": "postcss-html"
+    }
+  ],
+  "reportDescriptionlessDisables": true,
+  "reportInvalidScopeDisables": true,
+  "reportNeedlessDisables": true,
+  "reportUnscopedDisables": true,
+  "rules": {
+    "color-named": "never",
+    "declaration-no-important": true,
+    "declaration-property-value-no-unknown": true,
+    "font-weight-notation": "numeric",
+    "max-nesting-depth": 3,
+    "no-irregular-whitespace": true,
+    "no-unknown-animations": true,
+    "selector-max-compound-selectors": 3,
+    "selector-max-id": 0,
+    "selector-max-specificity": "0,3,2",
+    "selector-max-universal": 1,
+    "selector-no-qualifying-type": [true, { "ignore": ["attribute"] }],
+    "unit-allowed-list": [
+      "%",
+      "deg",
+      "dvh",
+      "em",
+      "fr",
+      "ms",
+      "px",
+      "rem",
+      "s",
+      "vh",
+      "vw"
+    ]
+  }
+}

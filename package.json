@@ -36,7 +36,8 @@
   "author": "Christian Oliff (https://christianoliff.com)",
   "scripts": {
     "build": "npm run lint-js && node build.mjs",
-    "lint": "npm run lint-html && npm run lint-js && npm run prettier && npm run spellcheck && node build.mjs",
+    "lint": "npm run lint-html && npm run lint-css && npm run lint-js && npm run prettier && npm run spellcheck && node build.mjs",
+    "lint-css": "stylelint \"docs/**/*.html\"",
     "lint-html": "npx htmlhint **/*.html",
     "lint-js": "npx eslint@8 build.mjs js/bootstrap-ui-sounds.js --fix",
     "pa11y": "npx pa11y https://coliff.github.io/bootstrap-ui-sounds/",
@@ -45,6 +46,9 @@
     "spellcheck": "npx cspell \"*.{html,js,json,md,mjs,txt,yml}\" --no-progress"
   },
   "devDependencies": {
+    "postcss-html": "2.0.0",
+    "stylelint": "17.16.0",
+    "stylelint-config-standard": "40.0.0",
     "terser": "5.51.2"
   },
   "volta": {

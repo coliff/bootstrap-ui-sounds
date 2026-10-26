@@ -35,6 +35,12 @@ jobs:
         with:
           node-version-file: .nvmrc
 
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint CSS
+        run: npm run lint-css
+
       - name: Lint HTML
         run: npm run lint-html
 
