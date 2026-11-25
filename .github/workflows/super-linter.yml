@@ -50,7 +50,7 @@ jobs:
           VALIDATE_EDITORCONFIG: false
           VALIDATE_GIT_COMMITLINT: false
           VALIDATE_JAVASCRIPT_PRETTIER: false
-          GITHUB_ACTIONS_ZIZMOR: false
+          VALIDATE_GITHUB_ACTIONS_ZIZMOR: false
           VALIDATE_HTML_PRETTIER: false
           VALIDATE_NATURAL_LANGUAGE: false
           VALIDATE_JAVASCRIPT_ES: false
