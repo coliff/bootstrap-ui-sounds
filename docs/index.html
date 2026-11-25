@@ -22,7 +22,7 @@
       display: inline-block;
     }
   </style>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>🔊</text></svg>" />
   <link rel="author" href="https://christianoliff.com/" />
@@ -42,7 +42,7 @@
       <h1 class="h2 mb-0">Bootstrap UI Sounds 🔊</h1>
       <p class="fg-2 mb-0 mt-1">
         Sounds are enabled via the <code>data-ui-sounds</code> attribute on this page.
-        Interact with each component to hear feedback. Built for Bootstrap 6.0.0-alpha.1.
+        Interact with each component to hear feedback. Built for Bootstrap 6.0.0-alpha.2.
       </p>
       <p class="mb-0 mt-3">
         <a class="fg-2" href="https://github.com/coliff/bootstrap-ui-sounds" target="_blank">
@@ -160,11 +160,16 @@
 
     <section class="mb-12">
       <h2 class="h5 mb-5">Chips</h2>
-      <div class="chip-input" data-bs-chips style="max-width: 420px">
-        <label class="chip-input-label" for="chipsInput">Tags:</label>
-        <span class="chip">Bootstrap</span>
-        <span class="chip">Sounds</span>
-        <input type="text" class="form-ghost" id="chipsInput" placeholder="Type and press Enter…" />
+      <div style="max-width: 420px">
+        <label class="form-label" for="chipsInput">Tags</label>
+        <div class="combobox-control" data-bs-toggle="combobox" data-bs-multiple="true" data-bs-allow-custom="true">
+          <input type="text" class="form-ghost" id="chipsInput" placeholder="Type and press Enter…" />
+        </div>
+        <div class="menu">
+          <button class="menu-item selected" type="button" data-bs-value="Bootstrap">Bootstrap</button>
+          <button class="menu-item selected" type="button" data-bs-value="Sounds">Sounds</button>
+          <button class="menu-item" type="button" data-bs-value="Accessibility">Accessibility</button>
+        </div>
       </div>
     </section>
 
@@ -446,7 +451,7 @@
     </footer>
   </main>
   <script type="module">
-    import { Toast } from "https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js";
+    import { Toast } from "https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.2/dist/js/bootstrap.bundle.min.js";
 
     const placeholder = document.getElementById("liveAlertPlaceholder");
     const alertTrigger = document.getElementById("liveAlertBtn");
