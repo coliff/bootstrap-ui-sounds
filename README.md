@@ -11,7 +11,7 @@ UI Sounds for Bootstrap 6. Subtle Web Audio API feedback for every interactive B
 **[Live demo](https://coliff.github.io/bootstrap-ui-sounds/docs/)**
 
 > [!NOTE]
-> This version targets [Bootstrap 6.0.0-alpha.1](https://www.npmjs.com/package/bootstrap/v/6.0.0-alpha.1). Bootstrap 6 renamed several components (Modal is now Dialog, Offcanvas is now Drawer, Dropdown is now Menu), so Bootstrap 5 projects should stay on v0.0.3.
+> This version targets [Bootstrap 6.0.0-alpha.2](https://www.npmjs.com/package/bootstrap/v/6.0.0-alpha.2). Bootstrap 6 renamed several components (Modal is now Dialog, Offcanvas is now Drawer, Dropdown is now Menu), so Bootstrap 5 projects should stay on v0.0.3.
 
 ## Usage
 
@@ -20,7 +20,7 @@ Bootstrap 6's JavaScript is ESM-only, so load it with `type="module"`. Then add 
 ```html
 <script
   type="module"
-  src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js"
+  src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.2/dist/js/bootstrap.bundle.min.js"
 ></script>
 <script
   src="https://cdn.jsdelivr.net/npm/bootstrap-ui-sounds/js/bootstrap-ui-sounds.min.js"
@@ -42,7 +42,7 @@ Set `data-ui-sounds="false"` on an element to mute it and everything inside it.
 - Alerts (shown and dismissed)
 - Buttons, toggle buttons, and close buttons
 - Carousel (previous, next, indicators, and play/pause)
-- Chips (add and remove)
+- Chips (add and remove, via multi-select Combobox)
 - Collapse
 - Combobox
 - Datepicker

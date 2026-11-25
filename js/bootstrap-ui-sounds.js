@@ -238,7 +238,9 @@
   document.addEventListener('change', function (e) {
     const el = e.target;
     if (!el.matches('input, textarea, select')) {return;}
-    if (el.matches('input[type="range"]')) {return;}
+    if (el.matches('input[type="range"], input[type="hidden"]')) {return;}
+    // Combobox dispatches native change events on its own inputs; its change.bs.combobox handler plays the sound
+    if (el.closest('[data-bs-toggle="combobox"]')) {return;}
     if (el.matches('input[type="checkbox"]')) {
       const isSwitch = el.matches('[role="switch"], [switch]') || (el.closest && el.closest('.switch'));
       playSound(
@@ -276,9 +278,26 @@
     playSound('close', getInteractionElement(e, e.target));
   });
 
-  // Combobox (opening and closing are covered by the Menu events it fires)
+  // Combobox (opening and closing are covered by the Menu events it fires).
+  // Multi-select comboboxes render chips (replacing the Chips component), so adding or
+  // removing a value plays the chip sounds; single-select plays the change sound.
+  let pendingComboboxChip = null;
+  function setPendingComboboxChip(type) {
+    pendingComboboxChip = type;
+    setTimeout(function () {
+      pendingComboboxChip = null;
+    }, 0);
+  }
+  document.addEventListener('add.bs.combobox', function () {
+    setPendingComboboxChip('chipAdd');
+  });
+  document.addEventListener('remove.bs.combobox', function () {
+    setPendingComboboxChip('chipRemove');
+  });
   document.addEventListener('change.bs.combobox', function (e) {
-    playSound('change', e.target);
+    const chipSound = Array.isArray(e.value) ? pendingComboboxChip : null;
+    pendingComboboxChip = null;
+    playSound(chipSound || 'change', e.target);
   });
 
   // Datepicker
@@ -290,14 +309,6 @@
   });
   document.addEventListener('change.bs.datepicker', function (e) {
     playSound('detail', e.target);
-  });
-
-  // Chips
-  document.addEventListener('add.bs.chips', function (e) {
-    playSound('chipAdd', e.target);
-  });
-  document.addEventListener('remove.bs.chips', function (e) {
-    playSound('chipRemove', e.target);
   });
 
   // OTP input – a soft tick per character, then a chime when complete
