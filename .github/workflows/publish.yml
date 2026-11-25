@@ -7,15 +7,20 @@ on:
       - published
   workflow_dispatch:
 
-permissions:
-  contents: read
-  id-token: write
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions: {}
 
 jobs:
   publish:
     name: Publish to npm
     runs-on: ubuntu-slim
     if: github.repository == 'coliff/bootstrap-ui-sounds'
+    permissions:
+      contents: read
+      id-token: write # Required for npm provenance
 
     steps:
       - name: Checkout Code
