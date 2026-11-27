@@ -39,7 +39,7 @@
     "lint": "npm run lint-html && npm run lint-js && npm run prettier && npm run spellcheck && node build.mjs",
     "lint-html": "npx htmlhint **/*.html",
     "lint-js": "npx eslint@8 build.mjs js/bootstrap-ui-sounds.js --fix",
-    "pa11y": "npx pa11y https://coliff.github.io/bootstrap-ui-sounds/",
+    "pa11y": "npx pa11y https://coliff.github.io/bootstrap-ui-sounds/docs/",
     "prettier": "npx prettier --write \"*.{html,js,json,mjs,yml}\"",
     "serve": "npm run lint-js && npm run build && npx serve . -l 3000",
     "spellcheck": "npx cspell \"*.{html,js,json,md,mjs,txt,yml}\" --no-progress"
