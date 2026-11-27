@@ -125,7 +125,7 @@
 
   function getTriggerFromTarget(target, selector) {
     if (!target || !target.id) {return null;}
-    const escapedId = window.CSS && window.CSS.escape ? window.CSS.escape(target.id) : target.id.replace(/"/g, '\\"');
+    const escapedId = window.CSS && window.CSS.escape ? window.CSS.escape(target.id) : target.id.replace(/["\\]/g, '\\$&');
     const doc = target.ownerDocument || document;
     return doc.querySelector(
       `${selector}[data-bs-target="#${escapedId}"], ${
@@ -172,13 +172,13 @@
     );
   }
 
-  // Close / dismiss (btn-close and data-bs-dismiss often lack .btn, so handle first)
+  // Close / dismiss (btn-close and data-bs-dismiss often lack .btn, so handle first).
+  // Dialog, drawer and toast dismissals fire their own hide event, which plays the close sound.
   document.addEventListener('click', function (e) {
     const closeEl = e.target && e.target.closest ? e.target.closest('.btn-close, [data-bs-dismiss]') : null;
-    if (closeEl) {
-      playSound('closeButton', closeEl);
-      return;
-    }
+    if (!closeEl) {return;}
+    if (closeEl.matches('[data-bs-dismiss="dialog"], [data-bs-dismiss="drawer"], [data-bs-dismiss="toast"]')) {return;}
+    playSound('closeButton', closeEl);
   }, true);
 
   // Buttons (exclude menu toggles and carousel controls to avoid double sounds)
@@ -228,11 +228,15 @@
     playSound('close', getInteractionElement(e, e.target));
   });
 
-  // Form inputs – focus (datepicker inputs open on focus, so they play the open sound instead)
+  // Form inputs – focus. Checkable, range and button inputs play their own sound when used,
+  // and datepicker / combobox inputs open on focus, so they play the open sound instead.
+  const FOCUS_SOUND_SELECTOR = `input${['hidden', 'checkbox', 'radio', 'range', 'button', 'submit', 'reset', 'image']
+    .map((type) => `:not([type="${type}"])`)
+    .join('')}, textarea, select`;
   document.addEventListener('focusin', function (e) {
     const el = e.target;
-    if (!el.matches || !el.matches('input:not([type="hidden"]), textarea, select')) {return;}
-    if (el.matches('[data-bs-toggle="datepicker"]')) {return;}
+    if (!el.matches || !el.matches(FOCUS_SOUND_SELECTOR)) {return;}
+    if (el.matches('[data-bs-toggle="datepicker"]') || el.closest('[data-bs-toggle="combobox"]')) {return;}
     playSound('focus', el);
   });
   document.addEventListener('change', function (e) {
@@ -361,21 +365,38 @@
   });
 
   // Details / Summary (capture so we run before any other handler; use document for enabled check)
+  // Opening one item of an exclusive accordion (<details name>) auto-closes the open one; only the
+  // opening item plays a sound so the two don't overlap.
+  function wasClosedByExclusiveGroup(details) {
+    const name = details.getAttribute('name');
+    if (!name) {return false;}
+    const escapedName = window.CSS && window.CSS.escape ? window.CSS.escape(name) : name.replace(/["\\]/g, '\\$&');
+    const root = details.getRootNode ? details.getRootNode() : document;
+    const open = root.querySelectorAll ? root.querySelectorAll(`details[name="${escapedName}"][open]`) : [];
+    return Array.prototype.some.call(open, function (other) {
+      return other !== details;
+    });
+  }
   document.addEventListener('toggle', function (e) {
-    if (!e.target || e.target.tagName.toUpperCase() !== 'DETAILS') {return;}
-    const soundType = e.target.open ? 'expand' : 'collapse';
-    playSound(soundType, e.target);
+    const details = e.target;
+    if (!details || !details.tagName || details.tagName.toUpperCase() !== 'DETAILS') {return;}
+    if (!details.open && wasClosedByExclusiveGroup(details)) {return;}
+    playSound(details.open ? 'expand' : 'collapse', details);
   }, true);
 
   // Form validation (one invalid sound per validation pass, not one per invalid field)
   let invalidSoundPending = false;
-  document.addEventListener('invalid', function (e) {
-    if (invalidSoundPending || !e.target || !e.target.matches('input, select, textarea')) {return;}
+  function playInvalidSound(element) {
+    if (invalidSoundPending) {return;}
     invalidSoundPending = true;
     setTimeout(function () {
       invalidSoundPending = false;
     }, 0);
-    playSound('formInvalid', e.target);
+    playSound('formInvalid', element);
+  }
+  document.addEventListener('invalid', function (e) {
+    if (!e.target || !e.target.matches('input, select, textarea')) {return;}
+    playInvalidSound(e.target);
   }, true);
   document.addEventListener('submit', function (e) {
     const form = e.target;
@@ -384,7 +405,13 @@
     const isValid = Array.prototype.every.call(form.elements, function (el) {
       return !el.willValidate || !el.validity || el.validity.valid;
     });
-    if (isValid) {playSound('formValid', form);}
+    if (isValid) {
+      playSound('formValid', form);
+    } else {
+      // Invalid forms only submit when validation is bypassed (novalidate / formnovalidate),
+      // so the browser fires no invalid events; play the invalid sound here instead.
+      playInvalidSound(form);
+    }
   }, true);
 
   // Alerts – when appearing (new alert added to DOM)
