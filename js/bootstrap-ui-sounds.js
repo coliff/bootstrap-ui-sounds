@@ -188,6 +188,8 @@
     if (btn.closest('.carousel') && btn.matches('[data-bs-slide], [data-bs-slide-to], .carousel-control-play-pause')) {return;}
     if (btn.classList.contains('btn-close') || btn.matches('[data-bs-dismiss]')) {return;}
     if (hasSemanticBootstrapSoundTrigger(btn)) {return;}
+    // Submit buttons trigger the form's valid / invalid sound, so skip the click sound
+    if (btn.type === 'submit' && btn.form) {return;}
     playSound('click', btn);
   }, true);
 
@@ -220,12 +222,39 @@
     playSound('collapse', getTriggerFromTarget(e.target, '[data-bs-toggle="collapse"]') || e.target);
   });
 
+  // Picking a value in a combobox or datepicker also closes its popup. The selection sound
+  // wins and the close sound is dropped, whichever of the two events fires first.
+  let selectionSoundPlayed = false;
+  let pendingCloseTimer = null;
+  function playSelectionSound(type, element) {
+    clearTimeout(pendingCloseTimer);
+    pendingCloseTimer = null;
+    selectionSoundPlayed = true;
+    setTimeout(function () {
+      selectionSoundPlayed = false;
+    }, 0);
+    playSound(type, element);
+  }
+  function playCloseUnlessSelection(element) {
+    if (selectionSoundPlayed) {return;}
+    clearTimeout(pendingCloseTimer);
+    pendingCloseTimer = setTimeout(function () {
+      pendingCloseTimer = null;
+      playSound('close', element);
+    }, 0);
+  }
+
   // Menu (replaces Dropdown in Bootstrap 6)
   document.addEventListener('show.bs.menu', function (e) {
     playSound('open', getInteractionElement(e, e.target));
   });
   document.addEventListener('hide.bs.menu', function (e) {
-    playSound('close', getInteractionElement(e, e.target));
+    const element = getInteractionElement(e, e.target);
+    if (e.target && e.target.closest && e.target.closest('[data-bs-toggle="combobox"]')) {
+      playCloseUnlessSelection(element);
+      return;
+    }
+    playSound('close', element);
   });
 
   // Form inputs – focus. Checkable, range and button inputs play their own sound when used,
@@ -301,7 +330,7 @@
   document.addEventListener('change.bs.combobox', function (e) {
     const chipSound = Array.isArray(e.value) ? pendingComboboxChip : null;
     pendingComboboxChip = null;
-    playSound(chipSound || 'change', e.target);
+    playSelectionSound(chipSound || 'change', e.target);
   });
 
   // Datepicker
@@ -309,17 +338,26 @@
     playSound('open', e.target);
   });
   document.addEventListener('hide.bs.datepicker', function (e) {
-    playSound('close', e.target);
+    playCloseUnlessSelection(e.target);
   });
   document.addEventListener('change.bs.datepicker', function (e) {
-    playSound('detail', e.target);
+    playSelectionSound('detail', e.target);
   });
 
-  // OTP input – a soft tick per character, then a chime when complete
+  // OTP input – a soft tick per character, then a chime when complete. The last character
+  // fires both events together, so the tick is deferred and dropped if the chime plays.
+  let pendingOtpKeyTimer = null;
   document.addEventListener('input.bs.otpInput', function (e) {
-    playSound('key', e.target);
+    const target = e.target;
+    clearTimeout(pendingOtpKeyTimer);
+    pendingOtpKeyTimer = setTimeout(function () {
+      pendingOtpKeyTimer = null;
+      playSound('key', target);
+    }, 0);
   });
   document.addEventListener('complete.bs.otpInput', function (e) {
+    clearTimeout(pendingOtpKeyTimer);
+    pendingOtpKeyTimer = null;
     playSound('complete', e.target);
   });
 
